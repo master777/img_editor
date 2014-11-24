@@ -15,7 +15,7 @@
     <div>
 <!--        <a href="#" onclick="lbaGenerateImage(CKEDITOR.config.img_editor_current_img)">RESETEAR</a>
         <a href="#" onclick="iniciarEdicion();">INICIAR EDICION</a>-->
-        <!--<a href="#" onclick="descargarImg();">Descargar</a>-->
+        <a href="#" onclick="descargarImg();">Descargar</a>
         <!--<br/>-->
         <!--<div class="img-container"><img id="img-editable" src="exam/vermeer.jpg" /></div>-->
         <div id="img-container" class="img-container"><img id="img-editable" /></div>
@@ -44,9 +44,17 @@
 //            $('#img-editable').imageMarkup({ color: 'red', width: 4, opacity: .5 });  
         });
         
-//        function descargarImg(){
-//            
-//        }
+        function descargarImg(){
+//            var img = $("#view-0 .image-markup-canvas");
+//            console.log(img);
+
+            var markup = window.current_image_markup;
+            console.log("window.current_image_markup");
+            console.log(markup);
+            
+            markup.custom_download();
+//            img.download();
+        }
     </script>
 </body>
 </html>
