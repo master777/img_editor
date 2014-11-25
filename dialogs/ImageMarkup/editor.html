@@ -27,33 +27,42 @@
     <script type="text/javascript" src="js/image-markup.js"></script>
     <script type="text/javascript">
         console.log("Mostrando IFRAME");
+        CKEDITOR = self.parent.CKEDITOR || {
+            config: {}
+        };
+        var default_img = { 
+            currentSrc: "exam/image_not_found.png", 
+            src : "exam/image_not_found.png"
+        };
+        var current_img = CKEDITOR.config.img_editor_current_img || default_img;
+        
         $(document).ready(function(){
-            CKEDITOR = self.parent.CKEDITOR || {
-                config: {}
-            };
-            
-            var default_img = { 
-                currentSrc: "exam/image_not_found.png", 
-                src : "exam/image_not_found.png"
-            };
-
-            var img_url = CKEDITOR.config.img_editor_current_img || default_img;
-            document.getElementById('img-editable').src = img_url.currentSrc;
+            document.getElementById('img-editable').src = current_img.currentSrc;
 
             var markup = $('.img-container img').imageMarkup({ color: 'red', width: 4, opacity: .5 });
 //            $('#img-editable').imageMarkup({ color: 'red', width: 4, opacity: .5 });  
         });
         
         function descargarImg(){
-//            var img = $("#view-0 .image-markup-canvas");
-//            console.log(img);
-
+            // Recuperamos la instancia utilizada en el image-markup.js
             var markup = window.current_image_markup;
-            console.log("window.current_image_markup");
-            console.log(markup);
+//            console.log("window.current_image_markup");
+//            console.log(markup);
             
-            markup.custom_download();
-//            img.download();
+            markup.custom_download(obtenerImg);
+        }
+        
+        function obtenerImg(url){
+            console.log("Nueva IMG:");
+            console.log(url);
+            
+//            CKEDITOR.img_editor_new_img_src = new_url;
+        }
+        
+        self.parent.descargarImg = function descargarImg(success_function){
+            // Recuperamos la instancia utilizada en el image-markup.js
+            var markup = window.current_image_markup;            
+            markup.custom_download(success_function);
         }
     </script>
 </body>

@@ -23,6 +23,7 @@ var generateUUID = function () {
         var settings = $.extend({}, defaults, options || {});
 
         var self = this;
+        // Guardamos la instancia en una variable global
         window.current_image_markup = self;
 
         this.setOptions = function (options) {
@@ -329,41 +330,44 @@ var generateUUID = function () {
             self.downloadCanvas(mergeCanvas[0], "image-markup.png");
         }
         
-        this.custom_downloadCanvas = function (canvas, filename) {
+        this.custom_downloadCanvas = function (canvas, success_function) {
             console.log("canvas");
             console.log(canvas);
-            
-            /// create an "off-screen" anchor tag
-            var lnk = document.createElement('a'),
-                e;
-
-            /// the key here is to set the download attribute of the a tag
-            lnk.download = filename;
-
-            /// convert canvas content to data-uri for link. When download
-            /// attribute is set the content pointed to by link will be
-            /// pushed as "download" in HTML5 capable browsers
-            lnk.href = canvas.toDataURL();
-            
             
             var dataURL = canvas.toDataURL("image/png");
             
             console.log("toDateURL");
             console.log(dataURL);
             
-//            alert(  dataURL.replace(/^data:image\/(png|jpg);base64,/, ""));
-            
-//            console.log("lnk.href");
-//            console.log(lnk.href);
+            var result = null;
             
             $.ajax({
-                type: "GET",
+                type: "POST",
                 url: "php/upload.php",
+//                async: false,
                 dataType: "json",
-                data: { img_url: 'http://a07.t26.net/avatares/4/7/9/0/120x120_nr_4790334.jpg' },
+                data: { 
+//                    img_url: 'http://a07.t26.net/avatares/4/7/9/0/120x120_nr_4790334.jpg' 
+//                    img_url: original_img.currentSrc, 
+                    img_base64: dataURL
+                },
+//                complete: function() {
+//                    return result;
+//                },
                 success: function(data) {
                     console.log("data");
                     console.log(data);
+                    
+                    if (!data['error'] && data['new_img_url']) {
+                        result = data['new_img_url'];
+//                        return result;
+                    }
+                    success_function(result);
+                    
+                },
+                error: function(xhr, status, error) {
+                    var err = eval("(" + xhr.responseText + ")");
+                    alert(err.Message);
                 }
             });
 
@@ -383,7 +387,7 @@ var generateUUID = function () {
 //            }
         }
         
-        this.custom_download = function () {
+        this.custom_download = function (success_function) {
             var canvas = paper.project.activeLayer.view.element;
             var img = $(canvas).parent().find('img')[0];
             var mergeCanvas = $('<canvas>')
@@ -398,7 +402,7 @@ var generateUUID = function () {
 
             mergedContext.drawImage(canvas, 0, 0);
 
-            self.custom_downloadCanvas(mergeCanvas[0], "image-markup.png");
+            self.custom_downloadCanvas(mergeCanvas[0], success_function);
         }
 
         this.setText = function () {

@@ -45,6 +45,7 @@ CKEDITOR.dialog.add('img_editor_dialog', function(editor) {
                 this.isImage = false;
                 
                 CKEDITOR.config.img_editor_current_img = null;
+                CKEDITOR.config.img_editor_new_img_src = null;
             } else {            
                 // Store the reference to the <img> element in an internal property, for later use.
                 this.element = element;
@@ -54,28 +55,6 @@ CKEDITOR.dialog.add('img_editor_dialog', function(editor) {
                 
                 document.getElementById('cke_lba_img_editor_iframe').contentWindow.location.reload();
                 
-//                if (!lba_initiated) {
-//                    setTimeout(function(){
-//                        console.log("LLAMANDO a generateImage()");
-////                        try {
-//                            lbaGenerateImage(this.element.$);
-////                        } catch (ex) {
-////                            console.log("ERROR: " + ex.messsage);
-////                        }
-//
-//                        lba_initiated = true;
-//                    }, 1000);                    
-//                } else {
-//                    console.log("LLAMANDO a generateImage() SIN TIEMPO DE ESPERA");
-////                    try {
-//                        lbaGenerateImage(this.element.$);
-////                    } catch (ex) {
-////                        console.log("ERROR: " + ex.messsage);
-////                    }
-//
-//                    lba_initiated = true;
-//                }                
-                
                 this.isImage = true;
 
                 // Invoke the setup methods of all dialog window elements, so they can load the element attributes.
@@ -84,16 +63,29 @@ CKEDITOR.dialog.add('img_editor_dialog', function(editor) {
         },
         // This method is invoked once a user clicks the OK button, confirming the dialog.
         onOk: function() {
-
             // The context of this function is the dialog object itself.
             // http://docs.ckeditor.com/#!/api/CKEDITOR.dialog
             var dialog = this;
 
-            // Create a new <img> element.
+            // Obtenemos el elemento <img> original
             var img = this.element;
+            console.log("OK - img");
+            console.log(img);
+            
+            subidaCompletada = function(new_url){
+                // Actualizamos la ruta de la imagen actual
+                if (new_url) {
+                    img.$.src = new_url;
+                } else {
+                    alert("ERROR: ¡La imagen no pudo ser guardada!");
+                }
+            };
+            
+            // Guardamos en el servidor la imagen modificada en el editor
+            descargarImg(subidaCompletada);
 
             // Invoke the commit methods of all dialog window elements, so the <img> element gets modified.
-            this.commitContent(img);
+//            this.commitContent(img);
         }
     };
 });
