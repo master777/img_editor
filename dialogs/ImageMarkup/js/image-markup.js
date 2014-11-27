@@ -1,4 +1,4 @@
-﻿/// <reference path="jquery-1.9.1.min.js" />
+/// <reference path="jquery-1.9.1.min.js" />
 /// <reference path="paper-core.js" />
 /// <reference path="paper-core.min.js" />
 /// <reference path="paper-full.js" />
@@ -344,16 +344,19 @@ var generateUUID = function () {
             $.ajax({
                 type: "POST",
                 url: "php/upload.php",
-//                async: false,
+                async: false,
                 dataType: "json",
                 data: { 
-//                    img_url: 'http://a07.t26.net/avatares/4/7/9/0/120x120_nr_4790334.jpg' 
-//                    img_url: original_img.currentSrc, 
                     img_base64: dataURL
                 },
-//                complete: function() {
-//                    return result;
-//                },
+                beforeSend: function() {
+                    // agregar mensaje de "loading"
+                    $("#img_editor_loading").html("<span class='wait'>... saving changes ...</span>");
+                },
+                complete: function() {
+                    // remove loading
+                    $("#img_editor_loading").html("");
+                },
                 success: function(data) {
                     console.log("data");
                     console.log(data);

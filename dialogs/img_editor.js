@@ -3,9 +3,11 @@ CKEDITOR.dialog.add('img_editor_dialog', function(editor) {
     return {
         // Basic properties of the dialog window: title, minimum size.
         title: 'Image Editor',
-        resizable: CKEDITOR.DIALOG_RESIZE_BOTH,
-        minWidth: 500,
-        minHeight: 350,
+//        resizable: CKEDITOR.DIALOG_RESIZE_BOTH,
+        minWidth: 150,
+        minHeight: 150,
+        width: 500,
+        height: 300,
         // Dialog window content definition.
         contents: [
             {
@@ -14,7 +16,11 @@ CKEDITOR.dialog.add('img_editor_dialog', function(editor) {
                 elements: [{
                     type: "html",
                     id: "previewHtml",
-                    html: '<iframe src="' + editor.img_editor_path + "dialogs/ImageMarkup/editor.html" + '" style="width: 100%; height: ' + 540 + 'px" hidefocus="true" frameborder="0" ' + 'id="cke_lba_img_editor_iframe"></iframe>'
+//                    html: '<iframe src="' + editor.img_editor_path + "dialogs/ImageMarkup/editor.html" + '" style="width: 100%; height: ' + 540 + 'px" hidefocus="true" frameborder="0" ' + 'id="cke_lba_img_editor_iframe"></iframe>'
+                    html: '<iframe src="' + editor.img_editor_path + "dialogs/ImageMarkup/editor.html" + '" style="width: 100%; height: 400px" hidefocus="true" frameborder="0" ' + 'id="cke_lba_img_editor_iframe"></iframe>'
+//                    html: '<iframe src="' + editor.img_editor_path + "dialogs/ImageMarkup/editor.html" + '" hidefocus="true" frameborder="0" ' + 'id="cke_lba_img_editor_iframe"></iframe>'
+//                    html: '<iframe src="' + editor.img_editor_path + "dialogs/ImageMarkup/editor.html" + '" frameborder="0" ' + 'id="cke_lba_img_editor_iframe"></iframe>'
+//                    html: '<span><b>HOLA</b></span>'
                 }]
             }
         ],
@@ -39,7 +45,8 @@ CKEDITOR.dialog.add('img_editor_dialog', function(editor) {
                 // Cerramos la ventana y mostramos una alerta al usuario
                 CKEDITOR.dialog.getCurrent().hide();
                 console.log("SALIR");
-                alert("¡¡Primero tenés que seleccionar una imagen, PEDAZO DE BOLUDO!!");
+                alert("First you must select an image!");
+//                alert("¡¡Primero tenés que seleccionar una imagen, PEDAZO DE BOLUDO!!");
 
                 // Flag the insertion mode for later use.
                 this.isImage = false;
@@ -53,7 +60,14 @@ CKEDITOR.dialog.add('img_editor_dialog', function(editor) {
 //                console.log("element");
 //                console.log(element);
                 
-                document.getElementById('cke_lba_img_editor_iframe').contentWindow.location.reload();
+//                document.getElementById('cke_lba_img_editor_iframe').contentWindow.location.reload();
+                
+                if (!lba_initiated) {
+                    lba_initiated = true;
+                } else {                    
+                    // Recargamos el iframe
+                    document.getElementById('cke_lba_img_editor_iframe').contentWindow.location.reload();
+                }                
                 
                 this.isImage = true;
 

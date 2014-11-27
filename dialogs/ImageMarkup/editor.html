@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>Image Markup</title>
@@ -13,57 +13,62 @@
 </head>
 <body>
     <div>
-<!--        <a href="#" onclick="lbaGenerateImage(CKEDITOR.config.img_editor_current_img)">RESETEAR</a>
-        <a href="#" onclick="iniciarEdicion();">INICIAR EDICION</a>-->
-        <a href="#" onclick="descargarImg();">Descargar</a>
-        <!--<br/>-->
-        <!--<div class="img-container"><img id="img-editable" src="exam/vermeer.jpg" /></div>-->
-        <div id="img-container" class="img-container"><img id="img-editable" /></div>
+        <!--<a href="#" onclick="descargarImg();">Descargar</a>-->
+        <div id="img-container" class="img-container"><img id="img-editable" src="#" alt="Editable Image" /></div>
+        <div id="img_editor_loading"></div>
     </div>
 
     <script src="js/CommandManager.js"></script>
     <script type="text/javascript" src="contextMenu/jquery.contextMenu.js"></script>
     <script type="text/javascript" src="contextMenu/jquery.ui.position.js"></script>
     <script type="text/javascript" src="js/image-markup.js"></script>
+    <script type="text/javascript" src="js/lba_adaptor.js"></script>
     <script type="text/javascript">
         console.log("Mostrando IFRAME");
-        CKEDITOR = self.parent.CKEDITOR || {
-            config: {}
-        };
-        var default_img = { 
-            currentSrc: "exam/image_not_found.png", 
-            src : "exam/image_not_found.png"
-        };
-        var current_img = CKEDITOR.config.img_editor_current_img || default_img;
-        
-        $(document).ready(function(){
-            document.getElementById('img-editable').src = current_img.currentSrc;
+//        CKEDITOR = self.parent.CKEDITOR || {
+//            config: {}
+//        };
+//        var default_img = { 
+//            currentSrc: "exam/image_not_found.png", 
+//            src : "exam/image_not_found.png"
+//        };
+//        var current_img;
+//        
+//        $(document).ready(function(){
+//            console.log("--- Cargando configuraciones ---");
+//            current_img = CKEDITOR.config.img_editor_current_img || default_img;
+//            console.log("current_img");
+//            console.log(current_img);
+//            document.getElementById('img-editable').src = current_img.src;
+////            $("#img-container").after("<span>HOLA</span>");
+//
+//            var markup = $('.img-container img').imageMarkup({ color: 'red', width: 4, opacity: .5 });
+////            $('#img-editable').imageMarkup({ color: 'red', width: 4, opacity: .5 });  
+//            
+//            self.parent.descargarImg = function descargarImg(success_function){
+//                // Recuperamos la instancia utilizada en el image-markup.js
+//                var markup = window.current_image_markup;            
+//                markup.custom_download(success_function);
+//            };
+//            console.log("--- Fin de la carga ---");
+//        });
 
-            var markup = $('.img-container img').imageMarkup({ color: 'red', width: 4, opacity: .5 });
-//            $('#img-editable').imageMarkup({ color: 'red', width: 4, opacity: .5 });  
-        });
         
-        function descargarImg(){
-            // Recuperamos la instancia utilizada en el image-markup.js
-            var markup = window.current_image_markup;
-//            console.log("window.current_image_markup");
-//            console.log(markup);
-            
-            markup.custom_download(obtenerImg);
-        }
-        
-        function obtenerImg(url){
-            console.log("Nueva IMG:");
-            console.log(url);
-            
-//            CKEDITOR.img_editor_new_img_src = new_url;
-        }
-        
-        self.parent.descargarImg = function descargarImg(success_function){
-            // Recuperamos la instancia utilizada en el image-markup.js
-            var markup = window.current_image_markup;            
-            markup.custom_download(success_function);
-        }
+//        function descargarImg(){
+//            // Recuperamos la instancia utilizada en el image-markup.js
+//            var markup = window.current_image_markup;
+////            console.log("window.current_image_markup");
+////            console.log(markup);
+//            
+//            markup.custom_download(obtenerImg);
+//        }
+//        
+//        function obtenerImg(url){
+//            console.log("Nueva IMG:");
+//            console.log(url);
+//            
+////            CKEDITOR.img_editor_new_img_src = new_url;
+//        }
     </script>
 </body>
 </html>
