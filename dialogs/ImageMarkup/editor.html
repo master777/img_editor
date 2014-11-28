@@ -10,10 +10,17 @@
     <!--<script src="js/lba_adaptor.js"></script>-->
     <link href="css/image-markup.css" rel="stylesheet" />
     <link href="contextMenu/jquery.contextMenu.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="css/spectrum.css" />
 </head>
 <body>
     <div>
-        <!--<a href="#" onclick="descargarImg();">Descargar</a>-->
+        <div id="toolbar-container">
+            <button onclick="tb_undo()">UNDO</button>
+            <button onclick="tb_redo()">REDO</button> &#124; 
+            <button onclick="tb_text()">TEXT</button>
+            <input type='text' id="custom-color" />
+        </div>
+        <br/>
         <div id="img-container" class="img-container"><img id="img-editable" src="#" alt="Editable Image" /></div>
         <div id="img_editor_loading"></div>
     </div>
@@ -23,52 +30,54 @@
     <script type="text/javascript" src="contextMenu/jquery.ui.position.js"></script>
     <script type="text/javascript" src="js/image-markup.js"></script>
     <script type="text/javascript" src="js/lba_adaptor.js"></script>
+    <script type="text/javascript" src="js/spectrum.js"></script>
     <script type="text/javascript">
         console.log("Mostrando IFRAME");
-//        CKEDITOR = self.parent.CKEDITOR || {
-//            config: {}
-//        };
-//        var default_img = { 
-//            currentSrc: "exam/image_not_found.png", 
-//            src : "exam/image_not_found.png"
-//        };
-//        var current_img;
-//        
-//        $(document).ready(function(){
-//            console.log("--- Cargando configuraciones ---");
-//            current_img = CKEDITOR.config.img_editor_current_img || default_img;
-//            console.log("current_img");
-//            console.log(current_img);
-//            document.getElementById('img-editable').src = current_img.src;
-////            $("#img-container").after("<span>HOLA</span>");
-//
-//            var markup = $('.img-container img').imageMarkup({ color: 'red', width: 4, opacity: .5 });
-////            $('#img-editable').imageMarkup({ color: 'red', width: 4, opacity: .5 });  
-//            
-//            self.parent.descargarImg = function descargarImg(success_function){
-//                // Recuperamos la instancia utilizada en el image-markup.js
-//                var markup = window.current_image_markup;            
-//                markup.custom_download(success_function);
-//            };
-//            console.log("--- Fin de la carga ---");
-//        });
-
         
-//        function descargarImg(){
-//            // Recuperamos la instancia utilizada en el image-markup.js
-//            var markup = window.current_image_markup;
-////            console.log("window.current_image_markup");
-////            console.log(markup);
-//            
-//            markup.custom_download(obtenerImg);
-//        }
-//        
-//        function obtenerImg(url){
-//            console.log("Nueva IMG:");
-//            console.log(url);
-//            
-////            CKEDITOR.img_editor_new_img_src = new_url;
-//        }
+        $(document).ready(function(){
+            $("#custom-color").spectrum({
+                showPaletteOnly: true,
+                showPalette: true,
+                color: 'red',
+                palette: [
+                    ['black', 'white', 'blanchedalmond',
+                    'rgb(255, 128, 0);', 'hsv 100 70 50'],
+                    ['red', 'yellow', 'green', 'blue', 'violet']
+                ]
+            });
+
+            $("#custom-color").on("change.color", function(event, color){
+                console.log("Color escogido: ");
+                console.log(color);
+    //            console.log(color.toRgb());
+                console.log(color.toString());
+
+                var markup = window.current_image_markup;
+                markup.setPenColor(color.toString());
+            });            
+        });
+        
+        function tb_undo() {
+            console.log("UNDO presionado");
+            
+            CommandManager.undo();            
+            paper.view.draw();
+        }
+        function tb_redo() {
+            console.log("UNDO presionado");
+            
+            CommandManager.redo();            
+            paper.view.draw();
+        }
+        function tb_text(){
+            console.log("TEXT presionado");
+            var markup = window.current_image_markup;
+//            console.log("markup");
+//            console.log(markup);
+            markup.setText();
+            
+            paper.view.draw();
+        }
     </script>
 </body>
 </html>

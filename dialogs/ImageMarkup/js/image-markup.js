@@ -363,7 +363,6 @@ var generateUUID = function () {
                     
                     if (!data['error'] && data['new_img_url']) {
                         result = data['new_img_url'];
-//                        return result;
                     }
                     success_function(result);
                     
@@ -373,21 +372,6 @@ var generateUUID = function () {
                     alert(err.Message);
                 }
             });
-
-            /// create a "fake" click-event to trigger the download
-//            if (document.createEvent) {
-//
-//                e = document.createEvent("MouseEvents");
-//                e.initMouseEvent("click", true, true, window,
-//                                 0, 0, 0, 0, 0, false, false, false,
-//                                 false, 0, null);
-//
-//                lnk.dispatchEvent(e);
-//
-//            } else if (lnk.fireEvent) {
-//
-//                lnk.fireEvent("onclick");
-//            }
         }
         
         this.custom_download = function (success_function) {
@@ -446,7 +430,8 @@ var generateUUID = function () {
 
         this.setPenColor = function (color) {
             self.setOptions({ color: color });
-            $('.image-markup-canvas').css('cursor', "url(img/" + color + "-pen.png) 14 50, auto");
+//            $('.image-markup-canvas').css('cursor', "url(img/" + color + "-pen.png) 14 50, auto");
+            $('.image-markup-canvas').css('cursor', "url(img/black-pen.png) 14 50, auto");
         }
 
         this.setCursorHandOpen = function () {

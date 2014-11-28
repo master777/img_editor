@@ -16,11 +16,7 @@ CKEDITOR.dialog.add('img_editor_dialog', function(editor) {
                 elements: [{
                     type: "html",
                     id: "previewHtml",
-//                    html: '<iframe src="' + editor.img_editor_path + "dialogs/ImageMarkup/editor.html" + '" style="width: 100%; height: ' + 540 + 'px" hidefocus="true" frameborder="0" ' + 'id="cke_lba_img_editor_iframe"></iframe>'
                     html: '<iframe src="' + editor.img_editor_path + "dialogs/ImageMarkup/editor.html" + '" style="width: 100%; height: 400px" hidefocus="true" frameborder="0" ' + 'id="cke_lba_img_editor_iframe"></iframe>'
-//                    html: '<iframe src="' + editor.img_editor_path + "dialogs/ImageMarkup/editor.html" + '" hidefocus="true" frameborder="0" ' + 'id="cke_lba_img_editor_iframe"></iframe>'
-//                    html: '<iframe src="' + editor.img_editor_path + "dialogs/ImageMarkup/editor.html" + '" frameborder="0" ' + 'id="cke_lba_img_editor_iframe"></iframe>'
-//                    html: '<span><b>HOLA</b></span>'
                 }]
             }
         ],
@@ -46,21 +42,19 @@ CKEDITOR.dialog.add('img_editor_dialog', function(editor) {
                 CKEDITOR.dialog.getCurrent().hide();
                 console.log("SALIR");
                 alert("First you must select an image!");
-//                alert("¡¡Primero tenés que seleccionar una imagen, PEDAZO DE BOLUDO!!");
 
                 // Flag the insertion mode for later use.
                 this.isImage = false;
                 
                 CKEDITOR.config.img_editor_current_img = null;
-                CKEDITOR.config.img_editor_new_img_src = null;
+//                CKEDITOR.config.img_editor_new_img_src = null;
             } else {            
                 // Store the reference to the <img> element in an internal property, for later use.
                 this.element = element;
-                CKEDITOR.config.img_editor_current_img = this.element.$;
 //                console.log("element");
 //                console.log(element);
-                
-//                document.getElementById('cke_lba_img_editor_iframe').contentWindow.location.reload();
+
+                CKEDITOR.config.img_editor_current_img = this.element.$;                
                 
                 if (!lba_initiated) {
                     lba_initiated = true;
