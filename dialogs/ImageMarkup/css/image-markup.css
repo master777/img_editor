@@ -6,7 +6,8 @@
 }
 
 .image-markup-canvas {
-    cursor: url(../img/red-pen.png) 14 50, auto;
+    /*cursor: url(../img/red-pen.png) 14 50, auto;*/
+    cursor: url(../img/layer-pen.png) 2 23, auto;
 }
 
 .context-menu-item.icon-text { background-image: url(../contextMenu/images/text.png); }

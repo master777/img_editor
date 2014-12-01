@@ -17,7 +17,7 @@ var generateUUID = function () {
 
 (function ($) {
 
-    var defaults = { color: 'red', width: 4, opacity: .5 };
+    var defaults = { color: 'red', width: 4, opacity: .5, current_tool: 'pen' };
 
     $.fn.imageMarkup = function (options) {
         var settings = $.extend({}, defaults, options || {});
@@ -25,6 +25,9 @@ var generateUUID = function () {
         var self = this;
         // Guardamos la instancia en una variable global
         window.current_image_markup = self;
+        
+        // Obtenemos la herramienta actual
+        self.current_tool = settings.current_tool;
 
         this.setOptions = function (options) {
             settings = $.extend(settings, options);
@@ -88,34 +91,45 @@ var generateUUID = function () {
 					
                     if (!$('.context-menu-list').is(':visible')){                        
 						
-						//position = event.point;
-						position = [offsetX,offsetY];
-						
-						console.log( 'point'+position );						
-						
-						paper.project.activeLayer.selected = false;						
-                        self.setPenColor(settings.color);
-						if (event.item) {
+                        //position = event.point;
+                        position = [offsetX, offsetY];
+
+//                        console.log('point' + position);
+
+                        paper.project.activeLayer.selected = false;
+                        
+                        if (self.current_tool == "pen") {
+                            self.setPenColor(settings.color);
+                        }
+                        
+                        if (self.current_tool == "select") {
+                            self.setSelect();
+                        }
+                        
+//                        console.log("self.current_tool");
+//                        console.log(self.current_tool);
+                        
+                        if (self.current_tool == "select" && event.item) {
                             event.item.selected = true;
                             selectedItem = event.item;
-                            self.setCursorHandOpen();				
-						} else {
-                            selectedItem = null;							
+                            self.setCursorHandOpen();
+                        } else {
+                            selectedItem = null;
                         }
-						
                     }
-                }
+                };
 
                 tool.onMouseDown = function (event) {
 
                     switch (event.event.button) {
                         // leftclick
                         case 0:
+                            console.log("mousedown");
                             // If we produced a path before, deselect it:
                             if (path) {
                                 path.selected = false;
                             }
-
+                            
                             path = new paper.Path();
                             path.data.id = generateUUID();
                             path.strokeColor = settings.color;
@@ -132,6 +146,7 @@ var generateUUID = function () {
                     switch (event.event.button) {
                         // leftclick
                         case 0:
+                            console.log("mousedrag");
                             // Every drag event, add a point to the path at the current
                             // position of the mouse:
 
@@ -394,7 +409,9 @@ var generateUUID = function () {
 
         this.setText = function () {
             var uid = generateUUID();
-            var pos = contextPoint;
+//            var pos = contextPoint;
+            var pos = {x: 0, y: 20};
+            
             CommandManager.execute({
                 execute: function () {
                     var TXT_DBL_CLICK = "<<double click to edit>>";
@@ -410,7 +427,7 @@ var generateUUID = function () {
                     text.onDoubleClick = function (event) {
                         if (this.className == 'PointText') {
                             var txt = prompt("Type in your text", this.content.replace(TXT_DBL_CLICK, ''));
-                            if (txt.length > 0)
+                            if (txt && txt.length > 0)
                                 this.content = txt;
                         }
                     }
@@ -427,11 +444,15 @@ var generateUUID = function () {
             });
 
         }
+        
+        this.setSelect = function () {
+            $('.image-markup-canvas').css('cursor', "url(img/layer-select.png) 12 12, auto");
+        }
 
         this.setPenColor = function (color) {
             self.setOptions({ color: color });
 //            $('.image-markup-canvas').css('cursor', "url(img/" + color + "-pen.png) 14 50, auto");
-            $('.image-markup-canvas').css('cursor', "url(img/black-pen.png) 14 50, auto");
+            $('.image-markup-canvas').css('cursor', "url(img/layer-pen.png) 2 23, auto");
         }
 
         this.setCursorHandOpen = function () {
@@ -496,5 +517,7 @@ var generateUUID = function () {
                 "yellowPen": { name: "Yellow Pen", icon: "yellowpen" },
             }
         });
+        
+        return self;
     };
 }(jQuery));

@@ -13,9 +13,11 @@ $(document).ready(function(){
     console.log(current_img);
     document.getElementById('img-editable').src = current_img.src;
 
-    var markup = $('.img-container img').imageMarkup({ color: 'red', width: 4, opacity: .5 });
+    markup = $('.img-container img').imageMarkup({ color: 'red', width: 4, opacity: .5 });
+//    console.log("MARKUP");
+//    console.log(markup);
 
-    self.parent.descargarImg = function descargarImg(success_function){
+    self.parent.downloadCustomImg = function(success_function) {
         // Recuperamos la instancia utilizada en el image-markup.js
         var markup = window.current_image_markup;
         markup.custom_download(success_function);

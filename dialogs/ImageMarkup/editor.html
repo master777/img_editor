@@ -17,6 +17,8 @@
         <div id="toolbar-container">
             <button onclick="tb_undo()">UNDO</button>
             <button onclick="tb_redo()">REDO</button> &#124; 
+            <button onclick="tb_select()">SELECT</button>
+            <button onclick="tb_pen()">PEN</button>
             <button onclick="tb_text()">TEXT</button>
             <input type='text' id="custom-color" />
         </div>
@@ -33,6 +35,8 @@
     <script type="text/javascript" src="js/spectrum.js"></script>
     <script type="text/javascript">
         console.log("Mostrando IFRAME");
+        
+        var markup = null;
         
         $(document).ready(function(){
             $("#custom-color").spectrum({
@@ -51,9 +55,11 @@
                 console.log(color);
     //            console.log(color.toRgb());
                 console.log(color.toString());
+                console.log(color.toHexString());
 
                 var markup = window.current_image_markup;
-                markup.setPenColor(color.toString());
+//                markup.setPenColor(color.toString());
+                markup.setPenColor(color.toHexString());
             });            
         });
         
@@ -69,14 +75,27 @@
             CommandManager.redo();            
             paper.view.draw();
         }
-        function tb_text(){
+        function tb_text() {
             console.log("TEXT presionado");
-            var markup = window.current_image_markup;
+//            var markup = window.current_image_markup;
 //            console.log("markup");
 //            console.log(markup);
+//            markup.setText();
             markup.setText();
             
             paper.view.draw();
+        }
+        function tb_select() {
+            markup.current_tool = "select";
+            markup.setSelect();
+        }
+        function tb_pen() {
+            markup.current_tool = "pen";
+            var color = $("#custom-color").spectrum('get');
+//            console.log(color);
+//            console.log(color.toString());
+//            console.log(color.toHexString());
+            markup.setPenColor(color.toHexString());
         }
     </script>
 </body>

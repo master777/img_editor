@@ -40,14 +40,13 @@ CKEDITOR.dialog.add('img_editor_dialog', function(editor) {
             if (!element || element.getName() != 'img') {
                 // Cerramos la ventana y mostramos una alerta al usuario
                 CKEDITOR.dialog.getCurrent().hide();
-                console.log("SALIR");
+//                console.log("SALIR");
                 alert("First you must select an image!");
 
                 // Flag the insertion mode for later use.
                 this.isImage = false;
                 
                 CKEDITOR.config.img_editor_current_img = null;
-//                CKEDITOR.config.img_editor_new_img_src = null;
             } else {            
                 // Store the reference to the <img> element in an internal property, for later use.
                 this.element = element;
@@ -64,9 +63,6 @@ CKEDITOR.dialog.add('img_editor_dialog', function(editor) {
                 }                
                 
                 this.isImage = true;
-
-                // Invoke the setup methods of all dialog window elements, so they can load the element attributes.
-//                this.setupContent(this.element);            
             }
         },
         // This method is invoked once a user clicks the OK button, confirming the dialog.
@@ -80,7 +76,7 @@ CKEDITOR.dialog.add('img_editor_dialog', function(editor) {
             console.log("OK - img");
             console.log(img);
             
-            subidaCompletada = function(new_url){
+            uploadCompleted = function(new_url){
                 // Actualizamos la ruta de la imagen actual
                 if (new_url) {
                     img.$.src = new_url;
@@ -90,10 +86,7 @@ CKEDITOR.dialog.add('img_editor_dialog', function(editor) {
             };
             
             // Guardamos en el servidor la imagen modificada en el editor
-            descargarImg(subidaCompletada);
-
-            // Invoke the commit methods of all dialog window elements, so the <img> element gets modified.
-//            this.commitContent(img);
+            downloadCustomImg(uploadCompleted);
         }
     };
 });
