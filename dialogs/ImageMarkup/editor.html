@@ -15,12 +15,19 @@
 <body>
     <div>
         <div id="toolbar-container">
-            <button onclick="tb_undo()">UNDO</button>
-            <button onclick="tb_redo()">REDO</button> &#124; 
-            <button onclick="tb_select()">SELECT</button>
-            <button onclick="tb_pen()">PEN</button>
-            <button onclick="tb_text()">TEXT</button>
-            <input type='text' id="custom-color" />
+            <button onclick="tb_undo()">Undo</button>
+            <button onclick="tb_redo()">Redo</button> 
+            &#124; 
+            <button onclick="tb_text()">Text</button>
+             &#124; 
+            <button onclick="tb_select()">Select/Move</button>
+            <br/>
+            <button onclick="tb_pen()">Pen</button>
+            <button onclick="tb_line()">Line</button>
+            <button onclick="tb_ellipse()">Ellipse</button>
+            <button onclick="tb_rectangle()">Rectangle</button>
+            &#124; 
+            <input type='text' id="custom-color" />            
         </div>
         <br/>
         <div id="img-container" class="img-container"><img id="img-editable" src="#" alt="Editable Image" /></div>
@@ -37,11 +44,13 @@
         console.log("Mostrando IFRAME");
         
         var markup = null;
+        var color = null;
         
         $(document).ready(function(){
             $("#custom-color").spectrum({
                 showPaletteOnly: true,
                 showPalette: true,
+                hideAfterPaletteSelect:true,
                 color: 'red',
                 palette: [
                     ['black', 'white', 'blanchedalmond',
@@ -49,6 +58,8 @@
                     ['red', 'yellow', 'green', 'blue', 'violet']
                 ]
             });
+            
+            color = $("#custom-color").spectrum('get');
 
             $("#custom-color").on("change.color", function(event, color){
                 console.log("Color escogido: ");
@@ -87,7 +98,7 @@
         }
         function tb_select() {
             markup.current_tool = "select";
-            markup.setSelect();
+            markup.setSelectIcon();
         }
         function tb_pen() {
             markup.current_tool = "pen";
@@ -96,6 +107,18 @@
 //            console.log(color.toString());
 //            console.log(color.toHexString());
             markup.setPenColor(color.toHexString());
+        }
+        function tb_ellipse(){
+            markup.current_tool = "ellipse";
+            markup.setPenIcon();
+        }
+        function tb_line(){
+            markup.current_tool = "line";
+            markup.setPenIcon();
+        }
+        function tb_rectangle(){
+            markup.current_tool = "rectangle";
+            markup.setPenIcon();
         }
     </script>
 </body>

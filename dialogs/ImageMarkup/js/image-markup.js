@@ -42,7 +42,7 @@ var generateUUID = function () {
                 self.paths = [];
                 renderPaths();
             }
-        }
+        };
 
         window.onkeydown = function (e) {
             return !(e.keyCode == 32);
@@ -78,41 +78,36 @@ var generateUUID = function () {
                 paper.setup(canvas[0]);
 
                 $(canvas).mouseenter(function () {
-						paper.projects[eachIndex].activate();
+                    paper.projects[eachIndex].activate();
                 });
                 // Create a simple drawing tool:
                 var tool = new paper.Tool();
-				var offsetX=0;
-				var offsetY=0;
-				
-                tool.onMouseMove = function (event) {					
-					
-					//console.log('evento on mouse');
-					
-                    if (!$('.context-menu-list').is(':visible')){                        
-						
+                var offsetX = 0;
+                var offsetY = 0;
+
+                tool.onMouseMove = function(event) {
+
+                    if (!$('.context-menu-list').is(':visible')) {
+
                         //position = event.point;
                         position = [offsetX, offsetY];
 
 //                        console.log('point' + position);
 
                         paper.project.activeLayer.selected = false;
-                        
+
                         if (self.current_tool == "pen") {
                             self.setPenColor(settings.color);
                         }
-                        
+
                         if (self.current_tool == "select") {
-                            self.setSelect();
+                            self.setSelectIcon();
                         }
-                        
-//                        console.log("self.current_tool");
-//                        console.log(self.current_tool);
-                        
+
                         if (self.current_tool == "select" && event.item) {
                             event.item.selected = true;
                             selectedItem = event.item;
-                            self.setCursorHandOpen();
+//                            self.setCursorHandOpen();
                         } else {
                             selectedItem = null;
                         }
@@ -130,17 +125,33 @@ var generateUUID = function () {
                                 path.selected = false;
                             }
                             
-                            path = new paper.Path();
-                            path.data.id = generateUUID();
-                            path.strokeColor = settings.color;
-                            path.strokeWidth = settings.width;
-                            path.opacity = settings.opacity;
+                            if (self.current_tool == "pen") {
+                                path = new paper.Path();
+                                path.data.id = generateUUID();
+                                path.strokeColor = settings.color;
+                                path.strokeWidth = settings.width;
+                                path.opacity = settings.opacity;                                
+                            } else if (self.current_tool == "ellipse") {
+                                // Implementado en el evento onMouseUp
+
+                            } else if (self.current_tool == "rectangle") {
+                                // Implementado en el evento onMouseUp
+                                
+                            } else if (self.current_tool == "line") {
+                                path = new paper.Path();
+                                path.data.id = generateUUID();
+                                path.strokeColor = settings.color;
+                                path.strokeWidth = settings.width;
+                                path.opacity = settings.opacity;
+                                path.add(event.point);
+                            }
+                            
                             break;
                             // rightclick
                         case 2:
                             break;
                     }
-                }
+                };
 
                 tool.onMouseDrag = function (event) {
                     switch (event.event.button) {
@@ -149,31 +160,44 @@ var generateUUID = function () {
                             console.log("mousedrag");
                             // Every drag event, add a point to the path at the current
                             // position of the mouse:
-
+                            
                             if (selectedItem) {
                                 if (!mouseDownPoint)
                                     mouseDownPoint = selectedItem.position;
 
-                                self.setCursorHandClose();
+//                                self.setCursorHandClose();
                                 selectedItem.position = new paper.Point(
                                     selectedItem.position.x + event.delta.x,
-                                    selectedItem.position.y + event.delta.y);
+                                    selectedItem.position.y + event.delta.y
+                                );
+                            } else if (path) {
+                                if (self.current_tool == "pen") {
+                                    path.add(event.point);
+                                } else if (self.current_tool == "ellipse") {
 
+                                } else if (self.current_tool == "rectangle") {
+
+                                } else if (self.current_tool == "line") {
+                                    
+                                }
                             }
-                            else if (path)
-                                path.add(event.point);
                             break;
                             // rightclick
                         case 2:
                             break;
                     }
-                }
+                };
 
                 tool.onMouseUp = function (event) {
+                    console.log("MouseUp");
+                    console.log(event.downPoint);
+                    console.log(event.point);
+                    
                     switch (event.event.button) {
                         // leftclick
                         case 0:
                             if (selectedItem) {
+//                                console.log("... Seleccionado");
                                 if (mouseDownPoint) {
                                     var selectedItemId = selectedItem.id;
                                     var draggingStartPoint = { x: mouseDownPoint.x, y: mouseDownPoint.y };
@@ -204,27 +228,123 @@ var generateUUID = function () {
                                 }
                             }
                             else {
-                                // When the mouse is released, simplify it:
-                                path.simplify();
-                                path.remove();
-                                var strPath = path.exportJSON({ asString: true });
-                                var uid = generateUUID();
-                                CommandManager.execute({
-                                    execute: function () {
-                                        path = new paper.Path();
-                                        path.importJSON(strPath);
-                                        path.data.uid = uid;
-                                    },
-                                    unexecute: function () {
-                                        $(paper.project.activeLayer.children).each(function (index, item) {
-                                            if (item.data && item.data.uid) {
-                                                if (item.data.uid == uid) {
-                                                    item.remove();
+//                                console.log("... No seleccionado");
+                                
+                                if (self.current_tool == "pen") {
+                                    // When the mouse is released, simplify it:
+                                    path.simplify();
+                                    path.remove();
+                                    var strPath = path.exportJSON({ asString: true });
+                                    var uid = generateUUID();
+                                    CommandManager.execute({
+                                        execute: function () {
+                                                path = new paper.Path();
+                                                path.importJSON(strPath);
+                                                path.data.uid = uid;                                                
+                                        },
+                                        unexecute: function () {
+                                            $(paper.project.activeLayer.children).each(function (index, item) {
+                                                if (item.data && item.data.uid) {
+                                                    if (item.data.uid == uid) {
+                                                        item.remove();
+                                                    }
                                                 }
-                                            }
-                                        });
-                                    }
-                                });
+                                            });
+                                        }
+                                    });
+                                    
+                                } else if (self.current_tool == "ellipse") {
+                                    console.log("ellipse");
+                                    
+                                    var myRadius = event.delta.length / 2;
+//                                    var ellipse = new paper.Path.Circle(event.downPoint, myRadius);
+                                    path = new paper.Path.Ellipse({
+                                        center: event.middlePoint, // event.downPoint,
+                                        radius: myRadius,
+//                                        fillColor: null,
+                                        strokeColor: settings.color,
+                                        strokeWidth: settings.width
+                                    });
+                                    path.opacity = settings.opacity;
+                                    path.data.id = generateUUID();
+                                    path.remove();
+                                    
+                                    // Procedemos a apilar los cambios para el UNDO y REDO con el CommandManager
+                                    var strPath = path.exportJSON({ asString: true });
+                                    var uid = generateUUID();
+                                    CommandManager.execute({
+                                        execute: function () {
+//                                            if (!path || !path.data.uid || path.data.uid != uid) {
+                                                path = new paper.Path();
+                                                path.importJSON(strPath);
+                                                path.data.uid = uid;                                                
+//                                            }
+                                        },
+                                        unexecute: function () {
+//                                            console.log("<<< UNDO >>>");
+                                            $(paper.project.activeLayer.children).each(function (index, item) {
+                                                if (item.data && item.data.uid) {
+                                                    if (item.data.uid == uid) {
+                                                        item.remove();
+                                                    }
+                                                }
+                                            });
+                                        }
+                                    });
+                                    
+                                } else if (self.current_tool == "rectangle") {
+                                    path = new paper.Path.Rectangle(event.downPoint, event.point);
+                                    path.strokeColor = settings.color;
+                                    path.strokeWidth = settings.width;
+                                    path.opacity = settings.opacity;
+                                    
+                                    path.data.id = generateUUID();
+                                    path.remove();
+                                    
+                                    // Procedemos a apilar los cambios para el UNDO y REDO con el CommandManager
+                                    var strPath = path.exportJSON({ asString: true });
+                                    var uid = generateUUID();
+                                    CommandManager.execute({
+                                        execute: function () {
+                                            path = new paper.Path();
+                                            path.importJSON(strPath);
+                                            path.data.uid = uid;
+                                        },
+                                        unexecute: function () {
+                                            $(paper.project.activeLayer.children).each(function (index, item) {
+                                                if (item.data && item.data.uid) {
+                                                    if (item.data.uid == uid) {
+                                                        item.remove();
+                                                    }
+                                                }
+                                            });
+                                        }
+                                    });
+                                    
+                                } else if (self.current_tool == "line") {
+                                    path.add(event.point);                                    
+                                    path.remove();
+                                    
+                                    // Procedemos a apilar los cambios para el UNDO y REDO con el CommandManager
+                                    var strPath = path.exportJSON({ asString: true });
+                                    var uid = generateUUID();
+                                    CommandManager.execute({
+                                        execute: function () {
+                                            path = new paper.Path();
+                                            path.importJSON(strPath);
+                                            path.data.uid = uid;
+                                        },
+                                        unexecute: function () {
+                                            $(paper.project.activeLayer.children).each(function (index, item) {
+                                                if (item.data && item.data.uid) {
+                                                    if (item.data.uid == uid) {
+                                                        item.remove();
+                                                    }
+                                                }
+                                            });
+                                        }
+                                    });
+                                }
                             }
                             break;
                             // rightclick
@@ -233,32 +353,32 @@ var generateUUID = function () {
                             contextSelectedItemId = selectedItem ? selectedItem.data.id : '';
                             break;
                     }
-                }
+                };
 
                 tool.onKeyUp = function (event) {
                     if (selectedItem) {
                         // When a key is released, set the content of the text item:
-						console.log(' event key 1');
+                        console.log(' event key 1');
 						
                         if (selectedItem.content) {
                             if (event.key == 'backspace')
                                 selectedItem.content = selectedItem.content.slice(0, -1);
                             else {
                                 selectedItem.content = selectedItem.content.replace('<some text>', '');
-                                if (event.key == 'space')
+                                if (event.key == 'space') {
                                     selectedItem.content += ' ';
-                                else if (event.key.length == 1){
+                                } else if (event.key.length == 1){
                                     selectedItem.content += event.key;									
-								}
+                                }
                             }
                         }
                     }
-                }
+                };
 
                 // Draw the view now:
                 paper.view.draw();
             });
-        }
+        };
 
         var path;
         var position;
@@ -295,7 +415,7 @@ var generateUUID = function () {
                     });
                 }
             });
-        }
+        };
 
         this.downloadCanvas = function (canvas, filename) {
 
@@ -325,7 +445,7 @@ var generateUUID = function () {
 
                 lnk.fireEvent("onclick");
             }
-        }
+        };
 
         this.download = function () {
             var canvas = paper.project.activeLayer.view.element;
@@ -343,7 +463,7 @@ var generateUUID = function () {
             mergedContext.drawImage(canvas, 0, 0);
 
             self.downloadCanvas(mergeCanvas[0], "image-markup.png");
-        }
+        };
         
         this.custom_downloadCanvas = function (canvas, success_function) {
             console.log("canvas");
@@ -387,7 +507,7 @@ var generateUUID = function () {
                     alert(err.Message);
                 }
             });
-        }
+        };
         
         this.custom_download = function (success_function) {
             var canvas = paper.project.activeLayer.view.element;
@@ -405,16 +525,16 @@ var generateUUID = function () {
             mergedContext.drawImage(canvas, 0, 0);
 
             self.custom_downloadCanvas(mergeCanvas[0], success_function);
-        }
+        };
 
         this.setText = function () {
             var uid = generateUUID();
 //            var pos = contextPoint;
-            var pos = {x: 0, y: 20};
+            var pos = {x: 0, y: 30};
             
             CommandManager.execute({
                 execute: function () {
-                    var TXT_DBL_CLICK = "<<double click to edit>>";
+                    var TXT_DBL_CLICK = '[ Edit me ]';// "<<double click to edit>>";
                     var txt = TXT_DBL_CLICK;
                     var text = new paper.PointText(pos);
                     text.content = txt;
@@ -443,25 +563,29 @@ var generateUUID = function () {
                 }
             });
 
-        }
+        };
         
-        this.setSelect = function () {
+        this.setSelectIcon = function () {
             $('.image-markup-canvas').css('cursor', "url(img/layer-select.png) 12 12, auto");
-        }
+        };
 
         this.setPenColor = function (color) {
             self.setOptions({ color: color });
 //            $('.image-markup-canvas').css('cursor', "url(img/" + color + "-pen.png) 14 50, auto");
             $('.image-markup-canvas').css('cursor', "url(img/layer-pen.png) 2 23, auto");
-        }
+        };
+        
+        this.setPenIcon = function () {
+            $('.image-markup-canvas').css('cursor', "url(img/layer-pen.png) 2 23, auto");
+        };
 
         this.setCursorHandOpen = function () {
             $('.image-markup-canvas').css('cursor', "url(img/hand-open.png) 25 25, auto");
-        }
+        };
 
         this.setCursorHandClose = function () {
             $('.image-markup-canvas').css('cursor', "url(img/hand-close.png) 25 25, auto");
-        }
+        };
 
         $.contextMenu({
             selector: '.image-markup-canvas',

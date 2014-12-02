@@ -13,7 +13,7 @@ $(document).ready(function(){
     console.log(current_img);
     document.getElementById('img-editable').src = current_img.src;
 
-    markup = $('.img-container img').imageMarkup({ color: 'red', width: 4, opacity: .5 });
+    markup = $('.img-container img').imageMarkup({ color: 'red', width: 4, opacity: 0.7 });
 //    console.log("MARKUP");
 //    console.log(markup);
 
