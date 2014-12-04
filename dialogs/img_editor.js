@@ -4,10 +4,10 @@ CKEDITOR.dialog.add('img_editor_dialog', function(editor) {
         // Basic properties of the dialog window: title, minimum size.
         title: 'Image Editor',
 //        resizable: CKEDITOR.DIALOG_RESIZE_BOTH,
-        minWidth: 150,
-        minHeight: 150,
-        width: 500,
-        height: 300,
+        minWidth: 700,
+        minHeight: 400,
+        width: 700,
+        height: 400,
         // Dialog window content definition.
         contents: [
             {

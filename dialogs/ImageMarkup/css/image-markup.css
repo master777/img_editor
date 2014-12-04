@@ -15,3 +15,47 @@
 .context-menu-item.icon-greenpen { background-image: url(../contextMenu/images/greenpen.png); }
 .context-menu-item.icon-bluepen { background-image: url(../contextMenu/images/bluepen.png); }
 .context-menu-item.icon-yellowpen { background-image: url(../contextMenu/images/yellowpen.png); }
+
+#toolbar-container{
+    background: #bbb;
+    margin: 0px auto;
+    width: 500px;
+    text-align: center;
+    border-radius: 5px;
+    padding: 5px;
+    box-sizing: border-box;
+}
+#toolbar{
+    background: url('../img/layers.jpg') repeat;
+    padding: 5px 0px;
+    width: 100%;
+    clear: both;
+}
+.sp-replacer{vertical-align: inherit!important;}
+.img-tool{
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    padding: 5px;
+    text-align: center;
+    background-color: transparent;
+    background-repeat: no-repeat;
+    cursor: pointer;
+    background-position: 5px 4px;
+}
+
+.select-icon{background-image: url('../img/layer-select.png')}
+.text-icon{background-image: url('../img/layer-text.png')}
+.pen-icon{background-image: url('../img/layer-pen.png')}
+.ellipse-icon{background-image: url('../img/layer-ellipse.png')}
+.rectangle-icon{background-image: url('../img/layer-rectangle.png')}
+.line-icon{background-image: url('../img/layer-line.png')}
+.undo-icon{background-image: url('../img/layer-undo.png')}
+.redo-icon{background-image: url('../img/layer-redo.png')}
+.clear-all{background-image: url('../img/clear-all.png')}
+.save-as{background-image: url('../img/layer-save.png')}
+.eraser-icon{background-image: url('../img/layer-eraser.png')}
+
+.active-tool{
+    background-color: #FFF;
+}

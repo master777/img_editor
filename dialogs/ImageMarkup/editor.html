@@ -14,23 +14,21 @@
 </head>
 <body>
     <div>
-        <div id="toolbar-container">
-            <button onclick="tb_undo()">Undo</button>
-            <button onclick="tb_redo()">Redo</button> 
-            &#124; 
-            <button onclick="tb_text()">Text</button>
-             &#124; 
-            <button onclick="tb_select()">Select/Move</button>
-            <br/>
-            <button onclick="tb_pen()">Pen</button>
-            <button onclick="tb_line()">Line</button>
-            <button onclick="tb_ellipse()">Ellipse</button>
-            <button onclick="tb_rectangle()">Rectangle</button>
-            <button onclick="tb_erase()">Eraser</button>
-            <button onclick="tb_clear_all()">Clear All</button>
-            <button onclick="tb_save_as()">Save</button>
-            &#124; 
-            <input type='text' id="custom-color" />            
+        <div id="toolbar">
+            <div id="toolbar-container">
+                <span class="select-icon img-tool" onclick="tb_select()"></span>            
+                <span class="rectangle-icon img-tool" onclick="tb_rectangle()"></span>            
+                <span class="ellipse-icon img-tool" onclick="tb_ellipse()"></span>
+                <span class="line-icon img-tool" onclick="tb_line()"></span>
+                <span class="pen-icon img-tool" onclick="tb_pen()"></span>
+                <span class="text-icon img-tool" onclick="tb_text()"></span>             
+                <span class="eraser-icon img-tool" onclick="tb_erase()"></span>
+                <span class="undo-icon img-tool" onclick="tb_undo()"></span>
+                <span class="redo-icon img-tool" onclick="tb_redo()"></span>             
+                <span class="clear-all img-tool" onclick="tb_clear_all()"></span>             
+                <span class="save-as img-tool" onclick="tb_save_as()"></span>             
+                <input type='text' id="custom-color" />    
+            </div>
         </div>
         <br/>
         <div id="img-container" class="img-container"><img id="img-editable" src="#" alt="Editable Image" /></div>
@@ -74,7 +72,13 @@
                 var markup = window.current_image_markup;
 //                markup.setPenColor(color.toString());
                 markup.setPenColor(color.toHexString());
-            });            
+            });
+            
+            $(".img-tool").click(function(){
+                console.log('tool selected');
+                $(".img-tool").removeClass('active-tool');
+                $(this).addClass('active-tool');
+            });
         });
         
         function tb_undo() {
