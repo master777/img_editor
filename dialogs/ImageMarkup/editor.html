@@ -26,6 +26,7 @@
             <button onclick="tb_line()">Line</button>
             <button onclick="tb_ellipse()">Ellipse</button>
             <button onclick="tb_rectangle()">Rectangle</button>
+            <button onclick="tb_erase()">Eraser</button>
             &#124; 
             <input type='text' id="custom-color" />            
         </div>
@@ -119,6 +120,10 @@
         function tb_rectangle(){
             markup.current_tool = "rectangle";
             markup.setPenIcon();
+        }
+        function tb_erase(){
+            markup.current_tool = "erase";
+            markup.setEraserIcon();
         }
     </script>
 </body>

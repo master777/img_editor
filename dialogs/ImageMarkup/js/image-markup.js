@@ -96,21 +96,24 @@ var generateUUID = function () {
 
                         paper.project.activeLayer.selected = false;
 
-                        if (self.current_tool == "pen") {
-                            self.setPenColor(settings.color);
-                        }
+//                        if (self.current_tool == "pen") {
+//                            self.setPenColor(settings.color);
+//                        }
+//
+//                        if (self.current_tool == "select") {
+//                            self.setSelectIcon();
+//                        }
 
-                        if (self.current_tool == "select") {
-                            self.setSelectIcon();
-                        }
-
-                        if (self.current_tool == "select" && event.item) {
+                        if ((self.current_tool == "select" 
+                                || self.current_tool == "erase") 
+                                && event.item) {
                             event.item.selected = true;
                             selectedItem = event.item;
 //                            self.setCursorHandOpen();
                         } else {
                             selectedItem = null;
                         }
+//                        console.log(selectedItem);
                     }
                 };
 
@@ -162,14 +165,16 @@ var generateUUID = function () {
                             // position of the mouse:
                             
                             if (selectedItem) {
-                                if (!mouseDownPoint)
-                                    mouseDownPoint = selectedItem.position;
+                                if (self.current_tool == "select") {
+                                    if (!mouseDownPoint)
+                                        mouseDownPoint = selectedItem.position;
 
-//                                self.setCursorHandClose();
-                                selectedItem.position = new paper.Point(
-                                    selectedItem.position.x + event.delta.x,
-                                    selectedItem.position.y + event.delta.y
-                                );
+    //                                self.setCursorHandClose();
+                                    selectedItem.position = new paper.Point(
+                                        selectedItem.position.x + event.delta.x,
+                                        selectedItem.position.y + event.delta.y
+                                    );                                    
+                                }
                             } else if (path) {
                                 if (self.current_tool == "pen") {
                                     path.add(event.point);
@@ -199,36 +204,41 @@ var generateUUID = function () {
                         case 0:
                             if (selectedItem) {
 //                                console.log("... Seleccionado");
-                                if (mouseDownPoint) {
-                                    var selectedItemId = selectedItem.id;
-                                    var draggingStartPoint = { x: mouseDownPoint.x, y: mouseDownPoint.y };
-                                    CommandManager.execute({
-                                        execute: function () {
-                                            //item was already moved, so do nothing
-                                        },
-                                        unexecute: function () {
-                                            $(paper.project.activeLayer.children).each(function (index, item) {
-                                                if (item.id == selectedItemId) {
-                                                    if (item.segments) {
-                                                        var middlePoint = new paper.Point(
-                                                                ((item.segments[item.segments.length - 1].point.x) - item.segments[0].point.x) / 2,
-                                                                ((item.segments[item.segments.length - 1].point.y) - item.segments[0].point.y) / 2
-                                                            );
-                                                        item.position =
-                                                            new paper.Point(draggingStartPoint.x, draggingStartPoint.y);
+                                if (self.current_tool == "select") {
+                                    if (mouseDownPoint) {
+                                        var selectedItemId = selectedItem.id;
+                                        var draggingStartPoint = { x: mouseDownPoint.x, y: mouseDownPoint.y };
+                                        CommandManager.execute({
+                                            execute: function () {
+                                                //item was already moved, so do nothing
+                                            },
+                                            unexecute: function () {
+                                                $(paper.project.activeLayer.children).each(function (index, item) {
+                                                    if (item.id == selectedItemId) {
+                                                        if (item.segments) {
+                                                            var middlePoint = new paper.Point(
+                                                                    ((item.segments[item.segments.length - 1].point.x) - item.segments[0].point.x) / 2,
+                                                                    ((item.segments[item.segments.length - 1].point.y) - item.segments[0].point.y) / 2
+                                                                );
+                                                            item.position =
+                                                                new paper.Point(draggingStartPoint.x, draggingStartPoint.y);
+                                                        }
+                                                        else {
+                                                            item.position = draggingStartPoint;
+                                                        }
+                                                        return false;
                                                     }
-                                                    else {
-                                                        item.position = draggingStartPoint;
-                                                    }
-                                                    return false;
-                                                }
-                                            });
-                                        }
-                                    });
-                                    mouseDownPoint = null;
+                                                });
+                                            }
+                                        });
+                                        mouseDownPoint = null;
+                                    }
+                                } else if (self.current_tool == "erase") {
+//                                    console.log("Borrar el elemento:");
+//                                    console.log(selectedItem);
+                                    self.erase(selectedItem);
                                 }
-                            }
-                            else {
+                            } else {
 //                                console.log("... No seleccionado");
                                 
                                 if (self.current_tool == "pen") {
@@ -256,18 +266,6 @@ var generateUUID = function () {
                                     
                                 } else if (self.current_tool == "ellipse") {
                                     console.log("ellipse");
-                                    
-//                                    var myRadius = event.delta.length / 2;
-//                                    path = new paper.Path.Ellipse({
-//                                        center: event.middlePoint, // event.downPoint,
-//                                        radius: myRadius,
-////                                        fillColor: null,
-//                                        strokeColor: settings.color,
-//                                        strokeWidth: settings.width
-//                                    });
-//                                    path.opacity = settings.opacity;
-//                                    path.data.id = generateUUID();
-//                                    path.remove();
                                     
                                     path = new paper.Path.Ellipse({
                                         center: event.middlePoint,
@@ -397,34 +395,61 @@ var generateUUID = function () {
         var selectedItem;
         var mouseDownPoint;
 
-        this.erase = function () {
-            var strPathArray = new Array();
-            $(paper.project.activeLayer.children).each(function (index, item) {
-                if (contextSelectedItemId) {
-                    if (contextSelectedItemId.length == 0 || item.data.id == contextSelectedItemId) {
-                        var strPath = item.exportJSON({ asString: true });
-                        strPathArray.push(strPath);
-                    }
-                }
-            });
+//        this.erase = function () {
+//            var strPathArray = new Array();
+//            $(paper.project.activeLayer.children).each(function (index, item) {
+//                if (contextSelectedItemId) {
+//                    if (contextSelectedItemId.length == 0 || item.data.id == contextSelectedItemId) {
+//                        var strPath = item.exportJSON({ asString: true });
+//                        strPathArray.push(strPath);
+//                    }
+//                }
+//            });
+//            
+//            CommandManager.execute({
+//                execute: function () {
+//                    $(paper.project.activeLayer.children).each(function (index, item) {
+//                        if (contextSelectedItemId) {
+//                            if (contextSelectedItemId.length == 0 || item.data.id == contextSelectedItemId) {
+//                                item.remove();
+//                            }
+//                        }
+//                    });
+//                },
+//                unexecute: function () {
+//                    $(strPathArray).each(function (index, strPath) {
+//                        path = new paper.Path();
+//                        path.importJSON(strPath);
+//                    });
+//                }
+//            });
+//        };
 
-            CommandManager.execute({
-                execute: function () {
-                    $(paper.project.activeLayer.children).each(function (index, item) {
-                        if (contextSelectedItemId) {
-                            if (contextSelectedItemId.length == 0 || item.data.id == contextSelectedItemId) {
+        this.erase = function (element) {
+            if (element && element.data.id) {
+                var clone_element = null;
+                $(paper.project.activeLayer.children).each(function (index, item) {
+                    if (element.data.id == item.data.id) {
+                        clone_element = item.exportJSON({ asString: true });
+                    }
+                });
+                CommandManager.execute({
+                    execute: function () {
+                        $(paper.project.activeLayer.children).each(function (index, item) {
+                            if (element.data.id == item.data.id) {
                                 item.remove();
+                                console.log("Item Eliminado!!!");
                             }
-                        }
-                    });
-                },
-                unexecute: function () {
-                    $(strPathArray).each(function (index, strPath) {
+                        });
+                    },
+                    unexecute: function () {
                         path = new paper.Path();
-                        path.importJSON(strPath);
-                    });
-                }
-            });
+                        path.importJSON(clone_element);
+                    }
+                });
+            } else {
+                console.log("Ninguna accion realizada!");
+            }
         };
 
         this.downloadCanvas = function (canvas, filename) {
@@ -587,6 +612,10 @@ var generateUUID = function () {
         
         this.setPenIcon = function () {
             $('.image-markup-canvas').css('cursor', "url(img/layer-pen.png) 2 23, auto");
+        };
+        
+        this.setEraserIcon = function () {
+            $('.image-markup-canvas').css('cursor', "url(img/layer-eraser.png) 2 23, auto");
         };
 
         this.setCursorHandOpen = function () {
