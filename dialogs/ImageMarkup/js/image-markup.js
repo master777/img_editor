@@ -192,6 +192,7 @@ var generateUUID = function () {
                     console.log("MouseUp");
                     console.log(event.downPoint);
                     console.log(event.point);
+                    console.log(event.delta);
                     
                     switch (event.event.button) {
                         // leftclick
@@ -256,15 +257,24 @@ var generateUUID = function () {
                                 } else if (self.current_tool == "ellipse") {
                                     console.log("ellipse");
                                     
-                                    var myRadius = event.delta.length / 2;
-//                                    var ellipse = new paper.Path.Circle(event.downPoint, myRadius);
+//                                    var myRadius = event.delta.length / 2;
+//                                    path = new paper.Path.Ellipse({
+//                                        center: event.middlePoint, // event.downPoint,
+//                                        radius: myRadius,
+////                                        fillColor: null,
+//                                        strokeColor: settings.color,
+//                                        strokeWidth: settings.width
+//                                    });
+//                                    path.opacity = settings.opacity;
+//                                    path.data.id = generateUUID();
+//                                    path.remove();
+                                    
                                     path = new paper.Path.Ellipse({
-                                        center: event.middlePoint, // event.downPoint,
-                                        radius: myRadius,
-//                                        fillColor: null,
-                                        strokeColor: settings.color,
-                                        strokeWidth: settings.width
+                                        center: event.middlePoint,
+                                        radius: [Math.abs(event.delta.x / 2), Math.abs(event.delta.y / 2)]
                                     });
+                                    path.strokeColor = settings.color;
+                                    path.strokeWidth = settings.width;
                                     path.opacity = settings.opacity;
                                     path.data.id = generateUUID();
                                     path.remove();
