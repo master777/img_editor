@@ -47,7 +47,7 @@ CKEDITOR.dialog.add('img_editor_dialog', function(editor) {
                 this.isImage = false;
                 
                 CKEDITOR.config.img_editor_current_img = null;
-            } else {            
+            } else {
                 // Store the reference to the <img> element in an internal property, for later use.
                 this.element = element;
 //                console.log("element");
@@ -57,10 +57,14 @@ CKEDITOR.dialog.add('img_editor_dialog', function(editor) {
                 
                 if (!lba_initiated) {
                     lba_initiated = true;
-                } else {                    
+                } else {
                     // Recargamos el iframe
                     document.getElementById('cke_lba_img_editor_iframe').contentWindow.location.reload();
-                }                
+                }
+                
+//                setTimeout(function(){
+//                    initEditor();
+//                }, 1000);
                 
                 this.isImage = true;
             }

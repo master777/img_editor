@@ -14,7 +14,7 @@
 </head>
 <body>
     <div>
-        <div id="toolbar">
+        <div id="toolbar" style="display: none;">
             <div id="toolbar-container">
                 <span class="select-icon img-tool" onclick="tb_select()"></span>            
                 <span class="rectangle-icon img-tool" onclick="tb_rectangle()"></span>            
@@ -31,7 +31,7 @@
             </div>
         </div>
         <br/>
-        <div id="img-container" class="img-container"><img id="img-editable" src="#" alt="Editable Image" /></div>
+        <div id="img-container" class="img-container"><img id="img-editable" src="img/page-loader.gif" alt="Editable Image" /></div>
         <div id="img_editor_loading"></div>
     </div>
 
@@ -39,104 +39,10 @@
     <script type="text/javascript" src="contextMenu/jquery.contextMenu.js"></script>
     <script type="text/javascript" src="contextMenu/jquery.ui.position.js"></script>
     <script type="text/javascript" src="js/image-markup.js"></script>
-    <script type="text/javascript" src="js/lba_adaptor.js"></script>
     <script type="text/javascript" src="js/spectrum.js"></script>
+    <script type="text/javascript" src="js/lba_adaptor.js"></script>
     <script type="text/javascript">
         console.log("Mostrando IFRAME");
-        
-        var markup = null;
-        var color = null;
-        
-        $(document).ready(function(){
-            $("#custom-color").spectrum({
-                showPaletteOnly: true,
-                showPalette: true,
-                hideAfterPaletteSelect:true,
-                color: 'red',
-                palette: [
-                    ['black', 'white', 'blanchedalmond',
-                    'rgb(255, 128, 0);', 'hsv 100 70 50'],
-                    ['red', 'yellow', 'green', 'blue', 'violet']
-                ]
-            });
-            
-            color = $("#custom-color").spectrum('get');
-
-            $("#custom-color").on("change.color", function(event, color){
-                console.log("Color escogido: ");
-                console.log(color);
-    //            console.log(color.toRgb());
-                console.log(color.toString());
-                console.log(color.toHexString());
-
-                var markup = window.current_image_markup;
-//                markup.setPenColor(color.toString());
-                markup.setPenColor(color.toHexString());
-            });
-            
-            $(".img-tool").click(function(){
-                console.log('tool selected');
-                $(".img-tool").removeClass('active-tool');
-                $(this).addClass('active-tool');
-            });
-        });
-        
-        function tb_undo() {
-            console.log("UNDO presionado");
-            
-            CommandManager.undo();            
-            paper.view.draw();
-        }
-        function tb_redo() {
-            console.log("UNDO presionado");
-            
-            CommandManager.redo();            
-            paper.view.draw();
-        }
-        function tb_text() {
-            console.log("TEXT presionado");
-//            var markup = window.current_image_markup;
-//            console.log("markup");
-//            console.log(markup);
-//            markup.setText();
-            markup.setText();
-            
-            paper.view.draw();
-        }
-        function tb_select() {
-            markup.current_tool = "select";
-            markup.setSelectIcon();
-        }
-        function tb_pen() {
-            markup.current_tool = "pen";
-            var color = $("#custom-color").spectrum('get');
-//            console.log(color);
-//            console.log(color.toString());
-//            console.log(color.toHexString());
-            markup.setPenColor(color.toHexString());
-        }
-        function tb_ellipse(){
-            markup.current_tool = "ellipse";
-            markup.setPenIcon();
-        }
-        function tb_line(){
-            markup.current_tool = "line";
-            markup.setPenIcon();
-        }
-        function tb_rectangle(){
-            markup.current_tool = "rectangle";
-            markup.setPenIcon();
-        }
-        function tb_erase(){
-            markup.current_tool = "erase";
-            markup.setEraserIcon();
-        }
-        function tb_clear_all(){
-            markup.erase_all();
-        }
-        function tb_save_as(){
-            markup.download();
-        }
     </script>
 </body>
 </html>
