@@ -136,9 +136,22 @@ var generateUUID = function () {
                                 path.opacity = settings.opacity;                                
                             } else if (self.current_tool == "ellipse") {
                                 // Implementado en el evento onMouseUp
+                                
+                                path = new paper.Path.Ellipse({
+                                    center: event.point,
+                                    radius: [0, 0]
+                                });
+                                path.strokeColor = settings.color;
+                                path.strokeWidth = settings.width;
+                                path.opacity = settings.opacity;
 
                             } else if (self.current_tool == "rectangle") {
                                 // Implementado en el evento onMouseUp
+                                
+                                path = new paper.Path.Rectangle(event.point, event.point);
+                                path.strokeColor = settings.color;
+                                path.strokeWidth = settings.width;
+                                path.opacity = settings.opacity;
                                 
                             } else if (self.current_tool == "line") {
                                 path = new paper.Path();
@@ -175,15 +188,49 @@ var generateUUID = function () {
                                         selectedItem.position.y + event.delta.y
                                     );                                    
                                 }
-                            } else if (path) {
+                            } else {
                                 if (self.current_tool == "pen") {
-                                    path.add(event.point);
+                                    if (path) {
+                                        path.add(event.point);                                        
+                                    }
                                 } else if (self.current_tool == "ellipse") {
-
-                                } else if (self.current_tool == "rectangle") {
-
-                                } else if (self.current_tool == "line") {
+                                    if (path) {
+                                        path.remove() ;
+                                    } 
+                                    path = new paper.Path.Rectangle(event.downPoint, event.point);
+                                    path.strokeColor = settings.color;
+                                    path.strokeWidth = 1;
+                                    path.strokeCap = 'round';
+                                    path.opacity = settings.opacity;
+                                    path.dashArray = [10, 4];
                                     
+//                                    path = new paper.Path.Ellipse({
+//                                        center: event.middlePoint,
+//                                        radius: [Math.abs(event.delta.x / 2), Math.abs(event.delta.y / 2)]
+//                                    });
+//                                    path.strokeColor = settings.color;
+//                                    path.strokeWidth = settings.width;
+//                                    path.opacity = settings.opacity;
+
+//                                    console.log("ellipse-drag");
+//                                    console.log(path);
+                                } else if (self.current_tool == "rectangle") {
+                                    if (path) {
+                                        path.remove();
+                                    }
+                                    path = new paper.Path.Rectangle(event.downPoint, event.point);
+                                    path.strokeColor = settings.color;
+                                    path.strokeWidth = settings.width;
+                                    path.opacity = settings.opacity;
+                                    
+                                } else if (self.current_tool == "line") {
+                                    if (path) {
+                                        if (!path.segments[1]) {
+                                            path.add(event.point);
+                                        } else {
+                                            path.segments[1].point = event.point;
+                                        }                                        
+                                    }
                                 }
                             }
                             break;
@@ -267,6 +314,10 @@ var generateUUID = function () {
                                 } else if (self.current_tool == "ellipse") {
                                     console.log("ellipse");
                                     
+                                    if (path) {
+                                        path.remove();
+                                    }
+                                    
                                     path = new paper.Path.Ellipse({
                                         center: event.middlePoint,
                                         radius: [Math.abs(event.delta.x / 2), Math.abs(event.delta.y / 2)]
@@ -282,14 +333,11 @@ var generateUUID = function () {
                                     var uid = generateUUID();
                                     CommandManager.execute({
                                         execute: function () {
-//                                            if (!path || !path.data.uid || path.data.uid != uid) {
-                                                path = new paper.Path();
-                                                path.importJSON(strPath);
-                                                path.data.uid = uid;                                                
-//                                            }
+                                            path = new paper.Path();
+                                            path.importJSON(strPath);
+                                            path.data.uid = uid;
                                         },
                                         unexecute: function () {
-//                                            console.log("<<< UNDO >>>");
                                             $(paper.project.activeLayer.children).each(function (index, item) {
                                                 if (item.data && item.data.uid) {
                                                     if (item.data.uid == uid) {
@@ -301,6 +349,9 @@ var generateUUID = function () {
                                     });
                                     
                                 } else if (self.current_tool == "rectangle") {
+                                    if (path) {
+                                        path.remove();
+                                    }
                                     path = new paper.Path.Rectangle(event.downPoint, event.point);
                                     path.strokeColor = settings.color;
                                     path.strokeWidth = settings.width;
@@ -330,7 +381,12 @@ var generateUUID = function () {
                                     });
                                     
                                 } else if (self.current_tool == "line") {
-                                    path.add(event.point);                                    
+                                    if (!path.segments[1]) {
+                                        path.segments[1].point = event.point;
+                                    } else {
+                                        path.add(event.point);                                        
+                                    }
+                                    
                                     path.remove();
                                     
                                     // Procedemos a apilar los cambios para el UNDO y REDO con el CommandManager

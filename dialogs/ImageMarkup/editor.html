@@ -16,17 +16,17 @@
     <div>
         <div id="toolbar" style="display: none;">
             <div id="toolbar-container">
-                <span class="select-icon img-tool" onclick="tb_select()"></span>            
-                <span class="rectangle-icon img-tool" onclick="tb_rectangle()"></span>            
-                <span class="ellipse-icon img-tool" onclick="tb_ellipse()"></span>
-                <span class="line-icon img-tool" onclick="tb_line()"></span>
-                <span class="pen-icon img-tool" onclick="tb_pen()"></span>
-                <span class="text-icon img-tool" onclick="tb_text()"></span>             
-                <span class="eraser-icon img-tool" onclick="tb_erase()"></span>
-                <span class="undo-icon img-tool" onclick="tb_undo()"></span>
-                <span class="redo-icon img-tool" onclick="tb_redo()"></span>             
-                <span class="clear-all img-tool" onclick="tb_clear_all()"></span>             
-                <span class="save-as img-tool" onclick="tb_save_as()"></span>             
+                <span class="select-icon img-tool" onclick="tb_select()" title="Move a layer"></span>            
+                <span class="rectangle-icon img-tool" onclick="tb_rectangle()" title="Draw a rectangle"></span>            
+                <span class="ellipse-icon img-tool" onclick="tb_ellipse()" title="Draw a ellipse"></span>
+                <span class="line-icon img-tool" onclick="tb_line()" title="Draw a line"></span>
+                <span class="pen-icon img-tool active-tool" onclick="tb_pen()" title="Draw a freeform line"></span>
+                <span class="text-icon img-tool" onclick="tb_text()" title="Insert a text"></span>             
+                <span class="eraser-icon img-tool" onclick="tb_erase()"  title="Delete a layer"></span>
+                <span class="undo-icon img-tool" onclick="tb_undo()" title="Undoes the last action"></span>
+                <span class="redo-icon img-tool" onclick="tb_redo()" title="Redoes the last action"></span>
+                <span class="clear-all img-tool" onclick="tb_clear_all()" title="Clean all"></span>             
+                <span class="save-as img-tool" onclick="tb_save_as()" title="Download the edited image"></span>             
                 <input type='text' id="custom-color" />    
             </div>
         </div>
