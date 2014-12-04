@@ -450,6 +450,32 @@ var generateUUID = function () {
             } else {
                 console.log("Ninguna accion realizada!");
             }
+            paper.view.draw();
+        };
+        
+        this.erase_all = function () {
+            var all_elements = new Array();
+            $(paper.project.activeLayer.children).each(function (index, item) {                
+                var clone_element = item.exportJSON({ asString: true });
+                all_elements.push(clone_element);
+            });
+            CommandManager.execute({
+                execute: function () {
+                    // Removemos todos los elementos Path
+                    $(paper.project.activeLayer.children).each(function (index, item) {                        
+                        item.remove();
+                        console.log("Item eliminado...");                        
+                    });
+                },
+                unexecute: function () {
+                    // Recuperamos todos los elementos Path borrados
+                    $(all_elements).each(function (index, element) {
+                        path = new paper.Path();
+                        path.importJSON(element);
+                    });                    
+                }
+            });
+            paper.view.draw();
         };
 
         this.downloadCanvas = function (canvas, filename) {
@@ -497,7 +523,7 @@ var generateUUID = function () {
 
             mergedContext.drawImage(canvas, 0, 0);
 
-            self.downloadCanvas(mergeCanvas[0], "image-markup.png");
+            self.downloadCanvas(mergeCanvas[0], "my_edited_image.png");
         };
         
         this.custom_downloadCanvas = function (canvas, success_function) {
@@ -606,7 +632,6 @@ var generateUUID = function () {
 
         this.setPenColor = function (color) {
             self.setOptions({ color: color });
-//            $('.image-markup-canvas').css('cursor', "url(img/" + color + "-pen.png) 14 50, auto");
             $('.image-markup-canvas').css('cursor', "url(img/layer-pen.png) 2 23, auto");
         };
         
@@ -626,60 +651,60 @@ var generateUUID = function () {
             $('.image-markup-canvas').css('cursor', "url(img/hand-close.png) 25 25, auto");
         };
 
-        $.contextMenu({
-            selector: '.image-markup-canvas',
-            callback: function (key, options) {
-                switch (key) {
-                    //COMMANDS
-                    case 'undo':
-                        CommandManager.undo();
-                        break;
-                    case 'redo':
-                        CommandManager.redo();
-                        break;
-                    case 'erase':
-                        self.erase();
-                        break;
-                    case 'download':
-                        self.download();
-                        break;
-                        //TOOLS
-                    case 'text':
-                        self.setText();
-                        break;
-                        //PENS
-                    case 'blackPen':
-                        self.setPenColor('black');
-                        break;
-                    case 'redPen':
-                        self.setPenColor('red');
-                        break;
-                    case 'greenPen':
-                        self.setPenColor('green');
-                        break;
-                    case 'bluePen':
-                        self.setPenColor('blue');
-                        break;
-                    case 'yellowPen':
-                        self.setPenColor('yellow');
-                        break;
-                }
-            },
-            items: {
-                "undo": { name: "Undo", icon: "undo" },
-                "redo": { name: "Redo", icon: "redo" },
-                "erase": { name: "Erase", icon: "erase" },
-                "download": { name: "Download", icon: "download" },
-                "sep1": "---------",
-                "text": { name: "Text", icon: "text" },
-                "sep2": "---------",
-                "blackPen": { name: "Black Pen", icon: "blackpen" },
-                "redPen": { name: "Red Pen", icon: "redpen" },
-                "greenPen": { name: "Green Pen", icon: "greenpen" },
-                "bluePen": { name: "Blue Pen", icon: "bluepen" },
-                "yellowPen": { name: "Yellow Pen", icon: "yellowpen" },
-            }
-        });
+//        $.contextMenu({
+//            selector: '.image-markup-canvas',
+//            callback: function (key, options) {
+//                switch (key) {
+//                    //COMMANDS
+//                    case 'undo':
+//                        CommandManager.undo();
+//                        break;
+//                    case 'redo':
+//                        CommandManager.redo();
+//                        break;
+//                    case 'erase':
+//                        self.erase();
+//                        break;
+//                    case 'download':
+//                        self.download();
+//                        break;
+//                        //TOOLS
+//                    case 'text':
+//                        self.setText();
+//                        break;
+//                        //PENS
+//                    case 'blackPen':
+//                        self.setPenColor('black');
+//                        break;
+//                    case 'redPen':
+//                        self.setPenColor('red');
+//                        break;
+//                    case 'greenPen':
+//                        self.setPenColor('green');
+//                        break;
+//                    case 'bluePen':
+//                        self.setPenColor('blue');
+//                        break;
+//                    case 'yellowPen':
+//                        self.setPenColor('yellow');
+//                        break;
+//                }
+//            },
+//            items: {
+//                "undo": { name: "Undo", icon: "undo" },
+//                "redo": { name: "Redo", icon: "redo" },
+//                "erase": { name: "Erase", icon: "erase" },
+//                "download": { name: "Download", icon: "download" },
+//                "sep1": "---------",
+//                "text": { name: "Text", icon: "text" },
+//                "sep2": "---------",
+//                "blackPen": { name: "Black Pen", icon: "blackpen" },
+//                "redPen": { name: "Red Pen", icon: "redpen" },
+//                "greenPen": { name: "Green Pen", icon: "greenpen" },
+//                "bluePen": { name: "Blue Pen", icon: "bluepen" },
+//                "yellowPen": { name: "Yellow Pen", icon: "yellowpen" },
+//            }
+//        });
         
         return self;
     };

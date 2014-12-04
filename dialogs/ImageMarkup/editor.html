@@ -27,6 +27,8 @@
             <button onclick="tb_ellipse()">Ellipse</button>
             <button onclick="tb_rectangle()">Rectangle</button>
             <button onclick="tb_erase()">Eraser</button>
+            <button onclick="tb_clear_all()">Clear All</button>
+            <button onclick="tb_save_as()">Save</button>
             &#124; 
             <input type='text' id="custom-color" />            
         </div>
@@ -124,6 +126,12 @@
         function tb_erase(){
             markup.current_tool = "erase";
             markup.setEraserIcon();
+        }
+        function tb_clear_all(){
+            markup.erase_all();
+        }
+        function tb_save_as(){
+            markup.download();
         }
     </script>
 </body>
