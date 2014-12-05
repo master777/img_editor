@@ -38,7 +38,7 @@ $(document).ready(function(){
         console.log("--- Cargando configuraciones ---");
 
         if (!CKEDITOR.config.img_editor_current_img) {
-            document.location.href = document.location.href;                
+//            document.location.href = document.location.href;                
         }
 
         current_img = CKEDITOR.config.img_editor_current_img || default_img;
@@ -110,4 +110,8 @@ function tb_clear_all(){
 }
 function tb_save_as(){
     markup.download();
+}
+function tb_arrow(){
+    markup.current_tool = "arrow";
+    markup.setArrowIcon();
 }

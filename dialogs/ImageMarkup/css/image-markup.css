@@ -19,7 +19,7 @@
 #toolbar-container{
     background: #bbb;
     margin: 0px auto;
-    width: 500px;
+    width: 530px;
     text-align: center;
     border-radius: 5px;
     padding: 5px;
@@ -50,6 +50,7 @@
 .ellipse-icon{background-image: url('../img/layer-ellipse.png')}
 .rectangle-icon{background-image: url('../img/layer-rectangle.png')}
 .line-icon{background-image: url('../img/layer-line.png')}
+.arrow-icon{background-image: url('../img/layer-arrow.png')}
 .undo-icon{background-image: url('../img/layer-undo.png')}
 .redo-icon{background-image: url('../img/layer-redo.png')}
 .clear-all{background-image: url('../img/clear-all.png')}

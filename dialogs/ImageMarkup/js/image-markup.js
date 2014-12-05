@@ -96,14 +96,6 @@ var generateUUID = function () {
 
                         paper.project.activeLayer.selected = false;
 
-//                        if (self.current_tool == "pen") {
-//                            self.setPenColor(settings.color);
-//                        }
-//
-//                        if (self.current_tool == "select") {
-//                            self.setSelectIcon();
-//                        }
-
                         if ((self.current_tool == "select" 
                                 || self.current_tool == "erase") 
                                 && event.item) {
@@ -154,6 +146,14 @@ var generateUUID = function () {
                                 path.opacity = settings.opacity;
                                 
                             } else if (self.current_tool == "line") {
+                                path = new paper.Path();
+                                path.data.id = generateUUID();
+                                path.strokeColor = settings.color;
+                                path.strokeWidth = settings.width;
+                                path.opacity = settings.opacity;
+                                path.add(event.point);
+                                
+                            } else if (self.current_tool == "arrow") {
                                 path = new paper.Path();
                                 path.data.id = generateUUID();
                                 path.strokeColor = settings.color;
@@ -231,6 +231,14 @@ var generateUUID = function () {
                                             path.segments[1].point = event.point;
                                         }                                        
                                     }
+                                } else if (self.current_tool == "arrow") {
+                                    if (path) {
+                                        if (!path.segments[1]) {
+                                            path.add(event.point);
+                                        } else {
+                                            path.segments[1].point = event.point;
+                                        }                                        
+                                    }
                                 }
                             }
                             break;
@@ -281,8 +289,6 @@ var generateUUID = function () {
                                         mouseDownPoint = null;
                                     }
                                 } else if (self.current_tool == "erase") {
-//                                    console.log("Borrar el elemento:");
-//                                    console.log(selectedItem);
                                     self.erase(selectedItem);
                                 }
                             } else {
@@ -395,6 +401,70 @@ var generateUUID = function () {
                                     CommandManager.execute({
                                         execute: function () {
                                             path = new paper.Path();
+                                            path.importJSON(strPath);
+                                            path.data.uid = uid;
+                                        },
+                                        unexecute: function () {
+                                            $(paper.project.activeLayer.children).each(function (index, item) {
+                                                if (item.data && item.data.uid) {
+                                                    if (item.data.uid == uid) {
+                                                        item.remove();
+                                                    }
+                                                }
+                                            });
+                                        }
+                                    });
+                                } else if (self.current_tool == "arrow") {
+                                    if (!path.segments[1]) {
+                                        path.segments[1].point = event.point;
+                                    } else {
+                                        path.add(event.point);                                        
+                                    }                                    
+                                    
+                                    var line_start = new paper.Point(path.segments[0].point);
+                                    var line_end = new paper.Point(path.segments[1].point);
+                                    
+                                    var arrow_start = new paper.Point(event.delta);
+                                    arrow_start.x = arrow_start.x / 7;
+                                    arrow_start.y = arrow_start.y / 7;
+                                    
+                                    console.log("inicio: " + line_start);
+                                    console.log("fin: " + line_end);
+                                    console.log("medio: " + arrow_start);
+                                    
+                                    // Primer extremo de la fecha
+                                    var first_end = new paper.Point();
+                                    first_end.x = line_end.x + arrow_start.rotate(135).x;
+                                    first_end.y = line_end.y + arrow_start.rotate(135).y;
+                                    // Segundo extremo de la fecha
+                                    var second_end = new paper.Point();
+                                    second_end.x = line_end.x + arrow_start.rotate(-135).x;
+                                    second_end.y = line_end.y + arrow_start.rotate(-135).y;
+                                                                        
+                                    var arrow = new paper.Path([
+                                        first_end,
+                                        line_end,
+                                        second_end
+                                    ]);
+                                    arrow.data.id = path.data.id;
+                                    arrow.strokeWidth = settings.width;
+                                    arrow.strokeColor = settings.color;
+                                    
+                                    // Flecha en su totalidad
+                                    var complete_arrow = new paper.Group({
+                                        children: [path, arrow]
+                                    });
+                                    complete_arrow.strokeWidth = settings.width;
+                                    complete_arrow.strokeColor = settings.color;
+                                    complete_arrow.data.id = path.data.id;
+                                    complete_arrow.remove();
+                                                                                                            
+                                    // Procedemos a apilar los cambios para el UNDO y REDO con el CommandManager
+                                    var strPath = complete_arrow.exportJSON({ asString: true });
+                                    var uid = generateUUID();
+                                    CommandManager.execute({
+                                        execute: function () {
+                                            path = new paper.Group();
                                             path.importJSON(strPath);
                                             path.data.uid = uid;
                                         },
@@ -693,6 +763,10 @@ var generateUUID = function () {
         
         this.setPenIcon = function () {
             $('.image-markup-canvas').css('cursor', "url(img/layer-pen.png) 2 23, auto");
+        };
+        
+        this.setArrowIcon = function () {
+            $('.image-markup-canvas').css('cursor', "url(img/layer-arrow2.png) 2 23, auto");
         };
         
         this.setEraserIcon = function () {
