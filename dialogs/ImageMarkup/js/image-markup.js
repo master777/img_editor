@@ -573,25 +573,29 @@ var generateUUID = function () {
 
             /// the key here is to set the download attribute of the a tag
             lnk.download = filename;
+            
+            try {                
+                /// convert canvas content to data-uri for link. When download
+                /// attribute is set the content pointed to by link will be
+                /// pushed as "download" in HTML5 capable browsers
+                lnk.href = canvas.toDataURL();
 
-            /// convert canvas content to data-uri for link. When download
-            /// attribute is set the content pointed to by link will be
-            /// pushed as "download" in HTML5 capable browsers
-            lnk.href = canvas.toDataURL();
+                /// create a "fake" click-event to trigger the download
+                if (document.createEvent) {
 
-            /// create a "fake" click-event to trigger the download
-            if (document.createEvent) {
+                    e = document.createEvent("MouseEvents");
+                    e.initMouseEvent("click", true, true, window,
+                                     0, 0, 0, 0, 0, false, false, false,
+                                     false, 0, null);
 
-                e = document.createEvent("MouseEvents");
-                e.initMouseEvent("click", true, true, window,
-                                 0, 0, 0, 0, 0, false, false, false,
-                                 false, 0, null);
+                    lnk.dispatchEvent(e);
 
-                lnk.dispatchEvent(e);
+                } else if (lnk.fireEvent) {
 
-            } else if (lnk.fireEvent) {
-
-                lnk.fireEvent("onclick");
+                    lnk.fireEvent("onclick");
+                }
+            } catch(error) {
+                alert("Sorry, it was not possible download the image!");
             }
         };
 
@@ -617,51 +621,55 @@ var generateUUID = function () {
             console.log("canvas");
             console.log(canvas);
             
-            var dataURL = canvas.toDataURL("image/png");
-            
-            console.log("toDateURL");
-            console.log(dataURL);
-            
-            var result = null;
-            
-            $.ajax({
-                type: "POST",
-                url: "php/upload.php",
-                async: false,
-//                async: true,
-                dataType: "json",
-                data: { 
-                    img_base64: dataURL
-                },
-                beforeSend: function() {
-                    // agregar mensaje de "loading"
-                    $("#img_editor_loading").html("<span class='wait'>... saving changes ...</span>");
-                    
-//                    $("body").append('<div id="img_editor_wait_screen" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5);"><div id="doksoft_easy_image_panel" style="position: absolute; border: 1px solid black; top: 50%; left: 50%; width: 300px; height: 40px; margin: -20px 0 0 -150px; background: #fff; padding: 10px;">'
-//                        + '<center><span>Please wait...</span></center>'
-//                        + '</div></div>');
-                },
-                complete: function() {
-                    // remove loading
-                    $("#img_editor_loading").html("");
-//                    $("#img_editor_wait_loading").remove();
-                },
-                success: function(data) {
-                    console.log("data");
-                    console.log(data);
-                    
-                    if (!data['error'] && data['new_img_url']) {
-                        result = data['new_img_url'];
+            try {                
+                var dataURL = canvas.toDataURL("image/png");
+
+                console.log("toDateURL");
+                console.log(dataURL);
+
+                var result = null;
+
+                $.ajax({
+                    type: "POST",
+                    url: "php/upload.php",
+                    async: false,
+    //                async: true,
+                    dataType: "json",
+                    data: { 
+                        img_base64: dataURL
+                    },
+                    beforeSend: function() {
+                        // agregar mensaje de "loading"
+                        $("#img_editor_loading").html("<span class='wait'>... saving changes ...</span>");
+
+    //                    $("body").append('<div id="img_editor_wait_screen" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5);"><div id="doksoft_easy_image_panel" style="position: absolute; border: 1px solid black; top: 50%; left: 50%; width: 300px; height: 40px; margin: -20px 0 0 -150px; background: #fff; padding: 10px;">'
+    //                        + '<center><span>Please wait...</span></center>'
+    //                        + '</div></div>');
+                    },
+                    complete: function() {
+                        // remove loading
+                        $("#img_editor_loading").html("");
+    //                    $("#img_editor_wait_loading").remove();
+                    },
+                    success: function(data) {
+                        console.log("data");
+                        console.log(data);
+
+                        if (!data['error'] && data['new_img_url']) {
+                            result = data['new_img_url'];
+                        }
+                        success_function(result);
+
+                    },
+                    error: function(xhr, status, error) {
+    //                    var err = eval("(" + xhr.responseText + ")");
+    //                    alert(err.Message);
+                        alert("An unexpected error occurred on the server. Please try later!");
                     }
-                    success_function(result);
-                    
-                },
-                error: function(xhr, status, error) {
-//                    var err = eval("(" + xhr.responseText + ")");
-//                    alert(err.Message);
-                    alert("An unexpected error occurred on the server. Please try later!");
-                }
-            });
+                });
+            } catch(error) {
+                alert("Sorry, it was not possible save the image!");
+            }            
         };
         
         this.custom_download = function (success_function) {
