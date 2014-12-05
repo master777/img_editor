@@ -456,6 +456,7 @@ var generateUUID = function () {
                                     });
                                     complete_arrow.strokeWidth = settings.width;
                                     complete_arrow.strokeColor = settings.color;
+                                    complete_arrow.opacity = settings.opacity;
                                     complete_arrow.data.id = path.data.id;
                                     complete_arrow.remove();
                                                                                                             
@@ -667,6 +668,7 @@ var generateUUID = function () {
                 type: "POST",
                 url: "php/upload.php",
                 async: false,
+//                async: true,
                 dataType: "json",
                 data: { 
                     img_base64: dataURL
@@ -674,10 +676,15 @@ var generateUUID = function () {
                 beforeSend: function() {
                     // agregar mensaje de "loading"
                     $("#img_editor_loading").html("<span class='wait'>... saving changes ...</span>");
+                    
+//                    $("body").append('<div id="img_editor_wait_screen" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5);"><div id="doksoft_easy_image_panel" style="position: absolute; border: 1px solid black; top: 50%; left: 50%; width: 300px; height: 40px; margin: -20px 0 0 -150px; background: #fff; padding: 10px;">'
+//                        + '<center><span>Please wait...</span></center>'
+//                        + '</div></div>');
                 },
                 complete: function() {
                     // remove loading
                     $("#img_editor_loading").html("");
+//                    $("#img_editor_wait_loading").remove();
                 },
                 success: function(data) {
                     console.log("data");

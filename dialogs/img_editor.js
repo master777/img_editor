@@ -83,7 +83,15 @@ CKEDITOR.dialog.add('img_editor_dialog', function(editor) {
             uploadCompleted = function(new_url){
                 // Actualizamos la ruta de la imagen actual
                 if (new_url) {
-                    img.$.src = new_url;
+                    console.log("==========================");
+                    console.log("Reemplazando SRC")
+                    
+                    img.$.src = new_url;                    
+//                    img.setAttribute('src', new_url);
+                    
+                    console.log(img.$.src);
+                    console.log("==========================");
+                    
                 } else {
                     alert("ERROR: ¡La imagen no pudo ser guardada!");
                 }
