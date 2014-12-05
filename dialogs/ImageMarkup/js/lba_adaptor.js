@@ -38,7 +38,7 @@ $(document).ready(function(){
         console.log("--- Cargando configuraciones ---");
 
         if (!CKEDITOR.config.img_editor_current_img) {
-//            document.location.href = document.location.href;                
+            document.location.href = document.location.href;
         }
 
         current_img = CKEDITOR.config.img_editor_current_img || default_img;

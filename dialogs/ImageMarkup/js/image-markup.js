@@ -729,6 +729,7 @@ var generateUUID = function () {
                     text.fontSize = 18;
                     text.fontFamily = 'Verdana';
                     text.data.uid = uid;
+                    text.data.id = uid;
                     text.opacity = settings.opacity;
 
                     text.onDoubleClick = function (event) {
