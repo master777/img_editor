@@ -204,16 +204,6 @@ var generateUUID = function () {
                                     path.opacity = settings.opacity;
                                     path.dashArray = [10, 4];
                                     
-//                                    path = new paper.Path.Ellipse({
-//                                        center: event.middlePoint,
-//                                        radius: [Math.abs(event.delta.x / 2), Math.abs(event.delta.y / 2)]
-//                                    });
-//                                    path.strokeColor = settings.color;
-//                                    path.strokeWidth = settings.width;
-//                                    path.opacity = settings.opacity;
-
-//                                    console.log("ellipse-drag");
-//                                    console.log(path);
                                 } else if (self.current_tool == "rectangle") {
                                     if (path) {
                                         path.remove();
@@ -522,36 +512,6 @@ var generateUUID = function () {
         var selectedItem;
         var mouseDownPoint;
 
-//        this.erase = function () {
-//            var strPathArray = new Array();
-//            $(paper.project.activeLayer.children).each(function (index, item) {
-//                if (contextSelectedItemId) {
-//                    if (contextSelectedItemId.length == 0 || item.data.id == contextSelectedItemId) {
-//                        var strPath = item.exportJSON({ asString: true });
-//                        strPathArray.push(strPath);
-//                    }
-//                }
-//            });
-//            
-//            CommandManager.execute({
-//                execute: function () {
-//                    $(paper.project.activeLayer.children).each(function (index, item) {
-//                        if (contextSelectedItemId) {
-//                            if (contextSelectedItemId.length == 0 || item.data.id == contextSelectedItemId) {
-//                                item.remove();
-//                            }
-//                        }
-//                    });
-//                },
-//                unexecute: function () {
-//                    $(strPathArray).each(function (index, strPath) {
-//                        path = new paper.Path();
-//                        path.importJSON(strPath);
-//                    });
-//                }
-//            });
-//        };
-
         this.erase = function (element) {
             if (element && element.data.id) {
                 var clone_element = null;
@@ -697,8 +657,9 @@ var generateUUID = function () {
                     
                 },
                 error: function(xhr, status, error) {
-                    var err = eval("(" + xhr.responseText + ")");
-                    alert(err.Message);
+//                    var err = eval("(" + xhr.responseText + ")");
+//                    alert(err.Message);
+                    alert("An unexpected error occurred on the server. Please try later!");
                 }
             });
         };
@@ -788,61 +749,6 @@ var generateUUID = function () {
         this.setCursorHandClose = function () {
             $('.image-markup-canvas').css('cursor', "url(img/hand-close.png) 25 25, auto");
         };
-
-//        $.contextMenu({
-//            selector: '.image-markup-canvas',
-//            callback: function (key, options) {
-//                switch (key) {
-//                    //COMMANDS
-//                    case 'undo':
-//                        CommandManager.undo();
-//                        break;
-//                    case 'redo':
-//                        CommandManager.redo();
-//                        break;
-//                    case 'erase':
-//                        self.erase();
-//                        break;
-//                    case 'download':
-//                        self.download();
-//                        break;
-//                        //TOOLS
-//                    case 'text':
-//                        self.setText();
-//                        break;
-//                        //PENS
-//                    case 'blackPen':
-//                        self.setPenColor('black');
-//                        break;
-//                    case 'redPen':
-//                        self.setPenColor('red');
-//                        break;
-//                    case 'greenPen':
-//                        self.setPenColor('green');
-//                        break;
-//                    case 'bluePen':
-//                        self.setPenColor('blue');
-//                        break;
-//                    case 'yellowPen':
-//                        self.setPenColor('yellow');
-//                        break;
-//                }
-//            },
-//            items: {
-//                "undo": { name: "Undo", icon: "undo" },
-//                "redo": { name: "Redo", icon: "redo" },
-//                "erase": { name: "Erase", icon: "erase" },
-//                "download": { name: "Download", icon: "download" },
-//                "sep1": "---------",
-//                "text": { name: "Text", icon: "text" },
-//                "sep2": "---------",
-//                "blackPen": { name: "Black Pen", icon: "blackpen" },
-//                "redPen": { name: "Red Pen", icon: "redpen" },
-//                "greenPen": { name: "Green Pen", icon: "greenpen" },
-//                "bluePen": { name: "Blue Pen", icon: "bluepen" },
-//                "yellowPen": { name: "Yellow Pen", icon: "yellowpen" },
-//            }
-//        });
         
         return self;
     };

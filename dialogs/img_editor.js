@@ -84,7 +84,7 @@ CKEDITOR.dialog.add('img_editor_dialog', function(editor) {
                 // Actualizamos la ruta de la imagen actual
                 if (new_url) {
                     console.log("==========================");
-                    console.log("Reemplazando SRC")
+                    console.log("Reemplazando SRC");
                     
                     img.$.src = new_url;                    
 //                    img.setAttribute('src', new_url);
