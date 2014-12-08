@@ -40,18 +40,12 @@ CKEDITOR.dialog.add('img_editor_dialog', function(editor) {
             if (!element || element.getName() != 'img') {
                 // Cerramos la ventana y mostramos una alerta al usuario
                 CKEDITOR.dialog.getCurrent().hide();
-//                console.log("SALIR");
                 alert("First you must select an image!");
-
-                // Flag the insertion mode for later use.
-                this.isImage = false;
                 
                 CKEDITOR.config.img_editor_current_img = null;
             } else {
                 // Store the reference to the <img> element in an internal property, for later use.
                 this.element = element;
-//                console.log("element");
-//                console.log(element);
 
                 CKEDITOR.config.img_editor_current_img = this.element.$;                
                 
@@ -61,17 +55,9 @@ CKEDITOR.dialog.add('img_editor_dialog', function(editor) {
                     // Recargamos el iframe
                     document.getElementById('cke_lba_img_editor_iframe').contentWindow.location.reload();
                 }
-                
-//                setTimeout(function(){
-//                    initEditor();
-//                }, 1000);
-                
-                this.isImage = true;
             }
         },
         buttons: [
-//            CKEDITOR.dialog.okButton,
-
             {
                 id: 'img_editor_save_replace',
                 type: 'button',
@@ -118,38 +104,6 @@ CKEDITOR.dialog.add('img_editor_dialog', function(editor) {
                 }
             },
             CKEDITOR.dialog.cancelButton
-        ]        
-        
-//        // This method is invoked once a user clicks the OK button, confirming the dialog.
-//        onOk: function() {
-//            // The context of this function is the dialog object itself.
-//            // http://docs.ckeditor.com/#!/api/CKEDITOR.dialog
-//            var dialog = this;
-//
-//            // Obtenemos el elemento <img> original
-//            var img = this.element;
-//            console.log("OK - img");
-//            console.log(img);
-//            
-//            uploadCompleted = function(new_url){
-//                // Actualizamos la ruta de la imagen actual
-//                if (new_url) {
-//                    console.log("==========================");
-//                    console.log("Reemplazando SRC");
-//                    
-//                    img.$.src = new_url;                    
-////                    img.setAttribute('src', new_url);
-//                    
-//                    console.log(img.$.src);
-//                    console.log("==========================");
-//                    
-//                } else {
-//                    alert("ERROR: ¡La imagen no pudo ser guardada!");
-//                }
-//            };
-//            
-//            // Guardamos en el servidor la imagen modificada en el editor
-//            downloadCustomImg(uploadCompleted);
-//        }
+        ]
     };
 });

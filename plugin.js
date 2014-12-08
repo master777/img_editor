@@ -41,24 +41,5 @@ CKEDITOR.plugins.add('img_editor', {
 
         // Register our dialog file -- this.path is the plugin folder path.
         CKEDITOR.dialog.add('img_editor_dialog', this.path + 'dialogs/img_editor.js');
-        
-//        CKEDITOR.on('instanceReady', function(ev) {
-//            var editor = ev.editor,
-//                dataProcessor = editor.dataProcessor,
-//                htmlFilter = dataProcessor && dataProcessor.htmlFilter;
-//
-//            htmlFilter.addRules({
-//                elements: {
-//                    $: function(element) {
-//                        if (element.name == 'img') {
-//                            var imgsrc = element.attributes.src;
-//
-//                            element.attributes.src = imgsrc;
-//                            element.attributes['data-cke-saved-src'] = imgsrc;
-//                        }
-//                    }
-//                }
-//            });
-//        });
     }
 });

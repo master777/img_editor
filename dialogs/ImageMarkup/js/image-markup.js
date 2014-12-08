@@ -618,45 +618,29 @@ var generateUUID = function () {
         };
         
         this.custom_downloadCanvas = function (canvas, success_function) {
-            console.log("canvas");
-            console.log(canvas);
-            
             try {
                 var dataURL = canvas.toDataURL("image/png");
-
-                console.log("toDateURL");
-                console.log(dataURL);
-
                 var result = null;
-                $("#img-container").hide();
-//                $("#toolbar").hide();
-                $("#img-loading").show();
-
-//                $("#img-container").css('display','none'); 
-//                $("#img-loading").css('display','block'); 
                 
                 $.ajax({
                     type: "POST",
                     url: "php/upload.php",
-//                    async: false,
                     async: true,
                     dataType: "json",
                     data: { 
                         img_base64: dataURL
                     },
                     beforeSend: function() {
-                        // agregar mensaje de "loading"
-//                        $("#img_editor_loading").html("<span class='wait'>... saving changes ...</span>");
-
-    //                    $("body").append('<div id="img_editor_wait_screen" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5);"><div id="doksoft_easy_image_panel" style="position: absolute; border: 1px solid black; top: 50%; left: 50%; width: 300px; height: 40px; margin: -20px 0 0 -150px; background: #fff; padding: 10px;">'
-    //                        + '<center><span>Please wait...</span></center>'
-    //                        + '</div></div>');
+                        $("#img-container").hide();
+                        $("#img-saving").show();
                     },
                     complete: function() {
-                        // remove loading
-//                        $("#img_editor_loading").html("");
-    //                    $("#img_editor_wait_loading").remove();
                         is_locked = false;
+                        
+                        $("#img-saving").hide();
+                        // Mostramos el otro gif de carga porque el iframe sera RECARGADO cuando se vuelva a editar otra imagen
+                        $("#img-loading").show();
+                        
                     },
                     success: function(data) {
                         console.log("data");
@@ -669,8 +653,6 @@ var generateUUID = function () {
 
                     },
                     error: function(xhr, status, error) {
-    //                    var err = eval("(" + xhr.responseText + ")");
-    //                    alert(err.Message);
                         alert("An unexpected error occurred on the server. Please try later!");
                     }
                 });
@@ -722,7 +704,7 @@ var generateUUID = function () {
                             if (txt && txt.length > 0)
                                 this.content = txt;
                         }
-                    }
+                    };
                 },
                 unexecute: function () {
                     $(paper.project.activeLayer.children).each(function (index, item) {

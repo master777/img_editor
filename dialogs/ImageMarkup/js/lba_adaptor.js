@@ -51,8 +51,8 @@ $(document).ready(function(){
         document.getElementById('img-editable').src = current_img.src;
 
         markup = $('.img-container img').imageMarkup({ color: color.toHexString(), width: 4, opacity: 0.7 });
-        console.log("markup");
-        console.log(markup);
+//        console.log("markup");
+//        console.log(markup);
 
         self.parent.downloadCustomImg = function(success_function) {
             markup.custom_download(success_function);
