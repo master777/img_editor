@@ -8,7 +8,22 @@ var markup = null;
 var color = null;
 var is_locked = true;
 
-$(document).ready(function(){
+$(document).ready(function() {    
+        console.log("--- Cargando configuraciones ---");
+
+        if (!CKEDITOR.config.img_editor_current_img) {
+            console.log("recargando");
+            document.location.href = document.location.href;
+        } else {
+            current_img = CKEDITOR.config.img_editor_current_img || default_img;
+
+            console.log("current_img");
+            console.log(current_img);
+
+            $('#img-editable').attr("src", current_img.src);
+            $('#img-editable').css('border', "solid 1px rgba(0,0,0,0.3)");            
+        }
+        
         $("#toolbar").show();
         $("#custom-color").spectrum({
             showPaletteOnly: true,
@@ -36,31 +51,15 @@ $(document).ready(function(){
                 $(this).addClass('active-tool');                
             }
         });
-
-        console.log("--- Cargando configuraciones ---");
-
-        if (!CKEDITOR.config.img_editor_current_img) {
-            document.location.href = document.location.href;
-        }
-
-        current_img = CKEDITOR.config.img_editor_current_img || default_img;
-
-        console.log("current_img");
-        console.log(current_img);
-
-        document.getElementById('img-editable').src = current_img.src;
-
-        markup = $('.img-container img').imageMarkup({ color: color.toHexString(), width: 4, opacity: 0.7 });
-//        console.log("markup");
-//        console.log(markup);
+        
+        markup = $('.img-container img').imageMarkup({ color: color.toHexString(), width: 4, opacity: 1 });
 
         self.parent.downloadCustomImg = function(success_function) {
             markup.custom_download(success_function);
         };
         
         is_locked = false;
-        console.log("--- Fin de la carga ---");                
-
+        console.log("--- Fin de la carga ---");
 });
 
 

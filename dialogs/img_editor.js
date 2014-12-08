@@ -12,7 +12,7 @@ CKEDITOR.dialog.add('img_editor_dialog', function(editor) {
         contents: [
             {
                 id: "preview",
-                label: "1111",
+                label: "Image Editor",
                 elements: [{
                     type: "html",
                     id: "previewHtml",
@@ -71,31 +71,44 @@ CKEDITOR.dialog.add('img_editor_dialog', function(editor) {
                     // The context of this function is the dialog object itself.
                     // http://docs.ckeditor.com/#!/api/CKEDITOR.dialog
                     var dialog = CKEDITOR.dialog.getCurrent();
+                    var save_button = this;
+                    save_button.disable();
                     
-                    console.log("dialog");
-                    console.log(dialog);
-
                     // Obtenemos el elemento <img> original
                     var img = CKEDITOR.config.img_editor_current_img;
                     console.log("OK - img");
                     console.log(img);
 
-                    uploadCompleted = function(new_url){
-                        console.log("new_url");
-                        console.log(new_url);
+                    uploadCompleted = function(result){
+                        var error_txt = "";
+                        
+                        console.log("result");
+                        console.log(result);
+                        
                         // Actualizamos la ruta de la imagen actual
-                        if (new_url) {
-                            console.log("==========================");
-                            console.log("Reemplazando SRC");
-                            
-                            img.src = new_url;
+                        if (result) {
+                            if (result['new_img_url'] && !result['error']) {
+                                console.log("==========================");
+                                console.log("Reemplazando SRC");
+                                
+                                img.src = result['new_img_url'];
 
-                            console.log(img.src);
-                            console.log("==========================");
-
+                                console.log(img.src);
+                                console.log("==========================");                                
+                            } else if (result['error']) {
+                                error_txt = result['error'];
+                            } else {
+                                error_txt = "Sorry, it was not possible save the image!";
+                            }
                         } else {
-                            alert("ERROR: ¡La imagen no pudo ser guardada!");
+                            error_txt = "Sorry, it was not possible save the image!";
                         }
+                        
+                        if (error_txt !== "") {
+                            alert(error_txt);
+                        }
+                        
+                        save_button.enable();
                         dialog.hide();
                     };
 
