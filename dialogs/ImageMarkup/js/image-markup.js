@@ -621,26 +621,32 @@ var generateUUID = function () {
             console.log("canvas");
             console.log(canvas);
             
-            try {                
+            try {
                 var dataURL = canvas.toDataURL("image/png");
 
                 console.log("toDateURL");
                 console.log(dataURL);
 
                 var result = null;
+                $("#img-container").hide();
+//                $("#toolbar").hide();
+                $("#img-loading").show();
 
+//                $("#img-container").css('display','none'); 
+//                $("#img-loading").css('display','block'); 
+                
                 $.ajax({
                     type: "POST",
                     url: "php/upload.php",
-                    async: false,
-    //                async: true,
+//                    async: false,
+                    async: true,
                     dataType: "json",
                     data: { 
                         img_base64: dataURL
                     },
                     beforeSend: function() {
                         // agregar mensaje de "loading"
-                        $("#img_editor_loading").html("<span class='wait'>... saving changes ...</span>");
+//                        $("#img_editor_loading").html("<span class='wait'>... saving changes ...</span>");
 
     //                    $("body").append('<div id="img_editor_wait_screen" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5);"><div id="doksoft_easy_image_panel" style="position: absolute; border: 1px solid black; top: 50%; left: 50%; width: 300px; height: 40px; margin: -20px 0 0 -150px; background: #fff; padding: 10px;">'
     //                        + '<center><span>Please wait...</span></center>'
@@ -648,8 +654,9 @@ var generateUUID = function () {
                     },
                     complete: function() {
                         // remove loading
-                        $("#img_editor_loading").html("");
+//                        $("#img_editor_loading").html("");
     //                    $("#img_editor_wait_loading").remove();
+                        is_locked = false;
                     },
                     success: function(data) {
                         console.log("data");
@@ -673,6 +680,7 @@ var generateUUID = function () {
         };
         
         this.custom_download = function (success_function) {
+            is_locked = true;
             var canvas = paper.project.activeLayer.view.element;
             var img = $(canvas).parent().find('img')[0];
             var mergeCanvas = $('<canvas>')

@@ -19,7 +19,7 @@ CKEDITOR.dialog.add('img_editor_dialog', function(editor) {
                     html: '<iframe src="' + editor.img_editor_path + "dialogs/ImageMarkup/editor.html" + '" style="width: 100%; height: 400px" hidefocus="true" frameborder="0" ' + 'id="cke_lba_img_editor_iframe"></iframe>'
                 }]
             }
-        ],
+        ],        
         // Invoked when the dialog is loaded.
         onShow: function() {
             if (typeof(lba_initiated) === 'undefined') {
@@ -69,36 +69,87 @@ CKEDITOR.dialog.add('img_editor_dialog', function(editor) {
                 this.isImage = true;
             }
         },
-        // This method is invoked once a user clicks the OK button, confirming the dialog.
-        onOk: function() {
-            // The context of this function is the dialog object itself.
-            // http://docs.ckeditor.com/#!/api/CKEDITOR.dialog
-            var dialog = this;
+        buttons: [
+//            CKEDITOR.dialog.okButton,
 
-            // Obtenemos el elemento <img> original
-            var img = this.element;
-            console.log("OK - img");
-            console.log(img);
-            
-            uploadCompleted = function(new_url){
-                // Actualizamos la ruta de la imagen actual
-                if (new_url) {
-                    console.log("==========================");
-                    console.log("Reemplazando SRC");
+            {
+                id: 'img_editor_save_replace',
+                type: 'button',
+                label: 'Save and Replace',
+                title: 'Save the edited image and replaces the original',
+                accessKey: 'C',
+                disabled: false,
+                onClick: function() {
+                    console.log("Saving image...");
                     
-                    img.$.src = new_url;                    
-//                    img.setAttribute('src', new_url);
+                    // The context of this function is the dialog object itself.
+                    // http://docs.ckeditor.com/#!/api/CKEDITOR.dialog
+                    var dialog = CKEDITOR.dialog.getCurrent();
                     
-                    console.log(img.$.src);
-                    console.log("==========================");
-                    
-                } else {
-                    alert("ERROR: ¡La imagen no pudo ser guardada!");
+                    console.log("dialog");
+                    console.log(dialog);
+
+                    // Obtenemos el elemento <img> original
+                    var img = CKEDITOR.config.img_editor_current_img;
+                    console.log("OK - img");
+                    console.log(img);
+
+                    uploadCompleted = function(new_url){
+                        console.log("new_url");
+                        console.log(new_url);
+                        // Actualizamos la ruta de la imagen actual
+                        if (new_url) {
+                            console.log("==========================");
+                            console.log("Reemplazando SRC");
+                            
+                            img.src = new_url;
+
+                            console.log(img.src);
+                            console.log("==========================");
+
+                        } else {
+                            alert("ERROR: ¡La imagen no pudo ser guardada!");
+                        }
+                        dialog.hide();
+                    };
+
+                    // Guardamos en el servidor la imagen modificada en el editor
+                    downloadCustomImg(uploadCompleted);
                 }
-            };
-            
-            // Guardamos en el servidor la imagen modificada en el editor
-            downloadCustomImg(uploadCompleted);
-        }
+            },
+            CKEDITOR.dialog.cancelButton
+        ]        
+        
+//        // This method is invoked once a user clicks the OK button, confirming the dialog.
+//        onOk: function() {
+//            // The context of this function is the dialog object itself.
+//            // http://docs.ckeditor.com/#!/api/CKEDITOR.dialog
+//            var dialog = this;
+//
+//            // Obtenemos el elemento <img> original
+//            var img = this.element;
+//            console.log("OK - img");
+//            console.log(img);
+//            
+//            uploadCompleted = function(new_url){
+//                // Actualizamos la ruta de la imagen actual
+//                if (new_url) {
+//                    console.log("==========================");
+//                    console.log("Reemplazando SRC");
+//                    
+//                    img.$.src = new_url;                    
+////                    img.setAttribute('src', new_url);
+//                    
+//                    console.log(img.$.src);
+//                    console.log("==========================");
+//                    
+//                } else {
+//                    alert("ERROR: ¡La imagen no pudo ser guardada!");
+//                }
+//            };
+//            
+//            // Guardamos en el servidor la imagen modificada en el editor
+//            downloadCustomImg(uploadCompleted);
+//        }
     };
 });
