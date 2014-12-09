@@ -67,7 +67,7 @@ CKEDITOR.dialog.add('img_editor_dialog', function(editor) {
                 accessKey: 'C',
                 disabled: false,
                 onClick: function() {
-                    console.log("Saving image...");
+//                    console.log("Saving image...");
                     
                     // The context of this function is the dialog object itself.
                     // http://docs.ckeditor.com/#!/api/CKEDITOR.dialog
@@ -77,25 +77,25 @@ CKEDITOR.dialog.add('img_editor_dialog', function(editor) {
                     
                     // Obtenemos el elemento <img> original
                     var img = CKEDITOR.config.img_editor_current_img;
-                    console.log("OK - img");
-                    console.log(img);
+//                    console.log("OK - img");
+//                    console.log(img);
 
                     uploadCompleted = function(result){
                         var error_txt = "";
                         
-                        console.log("result");
-                        console.log(result);
+//                        console.log("result");
+//                        console.log(result);
                         
                         // Actualizamos la ruta de la imagen actual
                         if (result) {
                             if (result['new_img_url'] && !result['error']) {
-                                console.log("==========================");
-                                console.log("Reemplazando SRC");
+//                                console.log("==========================");
+//                                console.log("Reemplazando SRC");
                                 
                                 img.src = result['new_img_url'];
 
-                                console.log(img.src);
-                                console.log("==========================");                                
+//                                console.log(img.src);
+//                                console.log("==========================");                                
                             } else if (result['error']) {
                                 error_txt = result['error'];
                             } else {

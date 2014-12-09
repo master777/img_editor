@@ -9,16 +9,16 @@ var color = null;
 var is_locked = true;
 
 $(document).ready(function() {    
-        console.log("--- Cargando configuraciones ---");
+//        console.log("--- Cargando configuraciones ---");
 
         if (!CKEDITOR.config.img_editor_current_img) {
-            console.log("recargando");
+//            console.log("recargando");
             document.location.href = document.location.href;
         } else {
             current_img = CKEDITOR.config.img_editor_current_img || default_img;
 
-            console.log("current_img");
-            console.log(current_img);
+//            console.log("current_img");
+//            console.log(current_img);
 
             $('#img-editable').attr("src", current_img.src);
             $('#img-editable').css('border', "solid 1px rgba(0,0,0,0.3)");            
@@ -46,7 +46,7 @@ $(document).ready(function() {
 
         $(".img-tool").click(function(){
             if (!is_locked) {
-                console.log('tool selected');
+//                console.log('tool selected');
                 $(".img-tool").removeClass('active-tool');
                 $(this).addClass('active-tool');                
             }
@@ -59,7 +59,7 @@ $(document).ready(function() {
         };
         
         is_locked = false;
-        console.log("--- Fin de la carga ---");
+//        console.log("--- Fin de la carga ---");
 });
 
 
@@ -67,7 +67,7 @@ $(document).ready(function() {
 
 function tb_undo() {
     if (!is_locked) {
-        console.log("UNDO presionado");
+//        console.log("UNDO presionado");
 
         CommandManager.undo();            
         paper.view.draw();        
@@ -75,7 +75,7 @@ function tb_undo() {
 }
 function tb_redo() {
     if (!is_locked) {
-        console.log("UNDO presionado");
+//        console.log("UNDO presionado");
 
         CommandManager.redo();            
         paper.view.draw();        
@@ -83,7 +83,7 @@ function tb_redo() {
 }
 function tb_text() {
     if (!is_locked) {
-        console.log("TEXT presionado");
+//        console.log("TEXT presionado");
         markup.setText();
 
         paper.view.draw();        

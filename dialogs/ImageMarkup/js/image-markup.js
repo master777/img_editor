@@ -46,15 +46,15 @@ var generateUUID = function () {
         };
 
         window.onload = function () {
-            console.log("--- window.onload ---");
+//            console.log("--- window.onload ---");
             setTimeout(function(){
                 $(self).each(function (eachIndex, eachItem) {
                     self.paths = [];
 
                     var img = eachItem;
 
-                    console.log("img");
-                    console.log(img);
+//                    console.log("img");
+//                    console.log(img);
 
                     var canvas = $('<canvas>')
                         .attr({
@@ -112,7 +112,7 @@ var generateUUID = function () {
                         switch (event.event.button) {
                             // leftclick
                             case 0:
-                                console.log("mousedown");
+//                                console.log("mousedown");
                                 // If we produced a path before, deselect it:
                                 if (path) {
                                     path.selected = false;
@@ -171,7 +171,7 @@ var generateUUID = function () {
                         switch (event.event.button) {
                             // leftclick
                             case 0:
-                                console.log("mousedrag");
+//                                console.log("mousedrag");
                                 // Every drag event, add a point to the path at the current
                                 // position of the mouse:
 
@@ -237,7 +237,7 @@ var generateUUID = function () {
                     };
 
                     tool.onMouseUp = function (event) {
-                        console.log("MouseUp");
+//                        console.log("MouseUp");
 //                        console.log(event.downPoint);
 //                        console.log(event.point);
 //                        console.log(event.delta);
@@ -481,7 +481,7 @@ var generateUUID = function () {
                     tool.onKeyUp = function (event) {
                         if (selectedItem) {
                             // When a key is released, set the content of the text item:
-                            console.log(' event key 1');
+//                            console.log(' event key 1');
 
                             if (selectedItem.content) {
                                 if (event.key == 'backspace')
@@ -524,7 +524,7 @@ var generateUUID = function () {
                         $(paper.project.activeLayer.children).each(function (index, item) {
                             if (element.data.id == item.data.id) {
                                 item.remove();
-                                console.log("Item Eliminado!!!");
+//                                console.log("Item Eliminado!!!");
                             }
                         });
                     },
@@ -533,9 +533,10 @@ var generateUUID = function () {
                         path.importJSON(clone_element);
                     }
                 });
-            } else {
-                console.log("Ninguna accion realizada!");
-            }
+            } 
+//            else {
+//                console.log("Ninguna accion realizada!");
+//            }
             paper.view.draw();
         };
         
@@ -550,7 +551,7 @@ var generateUUID = function () {
                     // Removemos todos los elementos Path
                     $(paper.project.activeLayer.children).each(function (index, item) {                        
                         item.remove();
-                        console.log("Item eliminado...");                        
+//                        console.log("Item eliminado...");                        
                     });
                 },
                 unexecute: function () {
@@ -644,8 +645,8 @@ var generateUUID = function () {
                         success_function(result);                        
                     },
                     success: function(data) {
-                        console.log("data");
-                        console.log(data);
+//                        console.log("data");
+//                        console.log(data);
 
                         result = data;
                     },

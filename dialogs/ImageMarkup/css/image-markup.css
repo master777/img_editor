@@ -1,4 +1,4 @@
-﻿body {
+body {
 }
 
 .img-container {
@@ -28,8 +28,15 @@
 #toolbar{
     background: url('../img/layers.jpg') repeat;
     padding: 5px 0px;
-    width: 100%;
+    width: 98%;
+    left: 8px;
     clear: both;
+    position: fixed;
+    height: 48px;
+}
+.relative-toolbar{
+    clear:both;
+    height:50px;
 }
 .sp-replacer{vertical-align: inherit!important;}
 .img-tool{
